@@ -2,6 +2,8 @@ package com.codepalace.accelerometer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class login_activity extends AppCompatActivity {
+public class login_activity extends SQLiteOpenHelper {
     EditText edUsername, edPassword;
     Button btn;
     TextView tv;
@@ -35,6 +37,16 @@ public class login_activity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
     }
 }
