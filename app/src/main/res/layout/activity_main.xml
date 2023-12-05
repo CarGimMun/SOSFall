@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#131313"
     tools:context="MainActivity">
-    <!---voy a poner un botón de llamada-->
+
     <TextView
         android:id="@+id/tv_square"
         android:layout_width="200dp"
@@ -17,7 +17,7 @@
         android:layout_marginBottom="82dp"
         android:background="#EF5350"
         android:gravity="center"
-        android:text="Hello"
+        android:text="How are we doing today?"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
@@ -26,22 +26,25 @@
         android:layout_width="327dp"
         android:layout_height="295dp"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="36dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="396dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="408dp"
         android:background="@mipmap/caida2"
-        app:srcCompat="@mipmap/caida2"
-        android:contentDescription="Warning icon"/>
+        android:contentDescription="Warning icon"
+        app:srcCompat="@mipmap/caida2" />
+
     <Button
         android:id="@+id/callButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="158dp"
-        android:layout_marginBottom="342dp"
+        android:layout_marginEnd="156dp"
+        android:layout_marginBottom="326dp"
         android:text="Llamada"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black" />
 </RelativeLayout>

@@ -1,6 +1,5 @@
 package com.codepalace.accelerometer
 
-
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -70,15 +69,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             ) } }
 
     override fun onSensorChanged(event: SensorEvent?) {
+
+        //BOTÓN DE LLAMADA//
         val callButton:Button = findViewById(R.id.callButton)
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
             limpiarVentanaTiempo()
-            //Llamada al pulsar botón
-            val numeroTelefono = "123456789" // Tu número de teléfono
-            val intent = Intent(Intent.ACTION_CALL)
-            intent.data = Uri.parse("tel:$numeroTelefono")
+
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                val it=intent
+                val username=it.getStringExtra("username")
+                val password=it.getStringExtra("password")
+                val db = DataBase(applicationContext,"SOSFall",null,1)
+                val telf = db.getContact(username = username, password = password) // Tu número de teléfono
+                val intent = Intent(Intent.ACTION_CALL)
+                intent.data = Uri.parse("tel:$telf")
                 startActivity(intent)
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
@@ -100,7 +105,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
             // Changes the colour of the square if it's completely flat
             if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
-           // if (valores.getMaximoX().toFloat() == 0.toFloat()) {
+                // if (valores.getMaximoX().toFloat() == 0.toFloat()) {
                 botonPopup.visibility = View.VISIBLE
                 callButton.visibility = View.VISIBLE
                 val color = Color.RED
@@ -129,8 +134,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 "Máximo Z: ${valores.getMaximoZ().format(2)}"
     }
 
-    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-        TODO("Not yet implemented")
+    override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
+        // Do something here if sensor accuracy changes.
+        // You must implement this callback in your code.
+
     }
     override fun onDestroy() {
         sensorManager.unregisterListener(this)

@@ -10,14 +10,14 @@
 
     <EditText
         android:id="@+id/editTextRegContact"
-        android:layout_width="221dp"
-        android:layout_height="53dp"
+        android:layout_width="223dp"
+        android:layout_height="52dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/chat"
+        android:drawableLeft="@android:drawable/stat_sys_phone_call"
         android:drawablePadding="10sp"
         android:ems="10"
-        android:hint="Emergency contact"
-        android:inputType="number"
+        android:hint="Emergency Contact"
+        android:inputType="phone"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:paddingRight="10dp"
@@ -26,10 +26,10 @@
         android:textColorHint="#F1EBEB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.536"
+        app:layout_constraintHorizontal_bias="0.553"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.528" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegEmail"
+        app:layout_constraintVertical_bias="0.05" />
 
     <EditText
         android:id="@+id/editTextRegEmail"
@@ -49,10 +49,10 @@
         android:textColorHint="#F1EBEB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.551"
+        app:layout_constraintHorizontal_bias="0.547"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.428" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegUsername"
+        app:layout_constraintVertical_bias="0.034" />
 
     <EditText
         android:id="@+id/editTextRegConfirm"
@@ -72,10 +72,10 @@
         android:textColorHint="#F1EBEB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintHorizontal_bias="0.553"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.731" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegPassword"
+        app:layout_constraintVertical_bias="0.091" />
 
     <EditText
         android:id="@+id/editTextRegPassword"
@@ -95,10 +95,10 @@
         android:textColorHint="#F1EBEB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintHorizontal_bias="0.553"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.627" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegContact"
+        app:layout_constraintVertical_bias="0.067" />
 
     <TextView
         android:id="@+id/textViewSOSFall"
@@ -162,9 +162,10 @@
         android:text="Register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.559"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.851" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRegConfirm"
+        app:layout_constraintVertical_bias="0.109" />
 
     <TextView
         android:id="@+id/textViewExistingUser"
@@ -176,8 +177,8 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.568"
+        app:layout_constraintHorizontal_bias="0.582"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.902" />
+        app:layout_constraintTop_toBottomOf="@+id/buttnReg"
+        app:layout_constraintVertical_bias="0.152" />
 </androidx.constraintlayout.widget.ConstraintLayout>
