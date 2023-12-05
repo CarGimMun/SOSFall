@@ -6,7 +6,7 @@ Ownership:
 
 Ángela Cayado Vega
 Lidia Jiménez Algarra 
-Hajar Boulehdid 
+Hajar Boulehdid Dob Buz
 Carmen Giménez Muñoz
 
 ----- 
@@ -17,5 +17,5 @@ Autoría:
 
 Ángela Cayado Vega
 Lidia Jiménez Algarra 
-Hajar Boulehdid 
+Hajar Boulehdid Dob Buz
 Carmen Giménez Muñoz
