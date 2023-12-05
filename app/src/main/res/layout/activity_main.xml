@@ -14,7 +14,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="102dp"
-        android:layout_marginBottom="82dp"
+        android:layout_marginBottom="29dp"
         android:background="#EF5350"
         android:gravity="center"
         android:text="How are we doing today?"
@@ -29,10 +29,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="43dp"
-        android:layout_marginBottom="408dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="67dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="368dp"
         android:background="@mipmap/caida2"
         android:contentDescription="Warning icon"
         app:srcCompat="@mipmap/caida2" />
@@ -43,8 +43,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="326dp"
+        android:layout_marginEnd="153dp"
+        android:layout_marginBottom="262dp"
         android:text="Llamada"
         android:textColor="@color/black" />
 </RelativeLayout>
+<!--
+    <TextView
+        android:id="@+id/registro_caidas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    android:padding="100dp"
+    android:textSize="16sp"
+    android:textColor="#000000"
+    android:background="#ffffff"
+    android:layout_marginTop="16dp" />-!>
+
