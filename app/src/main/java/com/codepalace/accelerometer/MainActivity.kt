@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }
     private fun setUpSensorStuff() {
-
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
         // Specify the sensor you want to listen to
@@ -181,6 +180,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // Programar la próxima limpieza después de un segundo
         handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }
+    /////////////ESTO NO SÉ SI TIENE QUE IR EN DATABASE O AQUÍ, HAY UNA COSA DE UN COMPANION QUE TIENE QUE VER, PERO NO SÉ QUÉ ES
     fun obtenerDatosDeTabla(): ArrayList<String> {
         val listaDatos = ArrayList<String>() // Lista para almacenar los datos recuperados
         val db = DataBase(applicationContext, "DataBase", null, 1)
@@ -206,7 +206,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
         // Devolver la lista de datos recuperados
         return listaDatos
-    }}
+    }
+    val registros = DataBase.obtenerDatosDeTabla()
+
+}
 
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)
 data class Valores(
