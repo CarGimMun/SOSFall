@@ -83,7 +83,21 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
     }
 
     fun obtener_registros_5(){
-        val registros = mutableListOf<String>()
-        val db = this.db_r
+        fun obtenerPrimeros5Registros(): List<Int> {
+            val registros = mutableListOf<Int>()
+            val db = this.readableDatabase
+            val query = "SELECT * FROM FALLS LIMIT 5"
+            val cursor: Cursor? = db.rawQuery(query, null)
+            cursor?.let {
+                if (it.moveToFirst()) {
+                    do {
+                        val registro = "${cursor.getString(0)}, ${cursor.getString(1)}, ${cursor.getString(2)}" // Modifica según tu estructura de datos
+                        registros.add(registro)
+                    } while (it.moveToNext())
+                }
+                cursor.close()
+            }
+            return registros
+        }
     } }
 

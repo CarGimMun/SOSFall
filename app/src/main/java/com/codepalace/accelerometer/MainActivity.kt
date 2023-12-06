@@ -1,6 +1,7 @@
 package com.codepalace.accelerometer
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -70,6 +71,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 SensorManager.SENSOR_DELAY_FASTEST,
                 SensorManager.SENSOR_DELAY_FASTEST
             ) } }
+    @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
         fun suena_alarma(){
             val resourceId = R.raw.alarma
@@ -183,7 +185,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val listaDatos = ArrayList<String>() // Lista para almacenar los datos recuperados
         val db = DataBase(applicationContext, "DataBase", null, 1)
         // Consulta para obtener todos los datos de la tabla
-        val query = "SELECT * FROM FALLS" //
+        val query = "SELECT * FROM FALLS LIMIT 5" //
         val cursor = db.readableDatabase.rawQuery(query, null)
         // Iterar a través del cursor para obtener los datos
         if (cursor != null) {
