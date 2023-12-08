@@ -30,7 +30,6 @@ import java.util.Calendar
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var db:dbCaidasHelper
-    private lateinit var binding: MainActivity
     private lateinit var sensorManager: SensorManager
     private lateinit var square: TextView
     private lateinit var botonPopup: ImageButton
@@ -121,7 +120,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         callButton.visibility=View.GONE
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
-            llamar()
+            registrar_caida()
+            //llamar()
             limpiarVentanaTiempo()
            }
         botonPopup.setOnClickListener {
@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
             // Changes the colour of the square if it's completely flat
             if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
-                // if (valores.getMaximoX().toFloat() == 0.toFloat()) {
+            //     if (valores.getMaximoX().toFloat() == 0.toFloat()) {
                 botonPopup.visibility = View.VISIBLE
                 callButton.visibility = View.VISIBLE
                 val color = Color.RED

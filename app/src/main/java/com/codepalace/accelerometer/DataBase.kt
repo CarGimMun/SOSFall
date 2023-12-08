@@ -15,8 +15,6 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
         val qr1 = "create table USERS(username,email,contact,password)"
         sqLiteDatabase.execSQL(qr1)
-        val qr2 = "create table FALLS(acc_x,acc_y,acc_z,hora,minuto,dia,mes,año)"
-        sqLiteDatabase.execSQL(qr2)
     }
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {}
@@ -63,25 +61,6 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
             phone="112"
         }
         return phone
-    }
-    fun registra_caida(
-        acc_x: Float?, acc_y: Float?,
-        acc_z:Float?, hora: Int?,
-        minuto: Int?,
-        dia: Int?,
-        mes: Int?,
-        año: Int?) {
-        val cv = ContentValues()
-        cv.put("acc_x", acc_x)
-        cv.put("acc_y", acc_y)
-        cv.put("acc_z", acc_z)
-        cv.put("hora", hora)
-        cv.put("minuto",minuto)
-        cv.put("dia", dia)
-        cv.put("mes", mes)
-        cv.put("año", año)
-        db_w.insert("FALLS", null, cv)
-        db_w.close()
     }
      }
 

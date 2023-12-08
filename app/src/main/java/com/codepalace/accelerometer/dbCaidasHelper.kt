@@ -49,4 +49,27 @@ class dbCaidasHelper (context: Context): SQLiteOpenHelper(context, DATABASE_NAME
         db.insert(TABLE_NAME, null,values)
         db.close()
     }
+    fun get5registros():List<Caidas>{
+        val listaCaidas= mutableListOf<Caidas>()
+        val db=readableDatabase
+        val query="SELECT * FROM $TABLE_NAME LIMIT 5"
+        val cursor=db.rawQuery(query,null)
+        while(cursor.moveToNext()) {
+            val id =cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_id))
+            val acc_x =cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_acc_x))
+            val acc_y =cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_acc_y))
+            val acc_z =cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_acc_z))
+            val minuto =cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_minuto))
+            val hora =cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_hora))
+            val dia =cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_dia))
+            val mes =cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_mes))
+            val ano =cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ano))
+
+            val caida=Caidas(id,acc_x,acc_y,acc_z,minuto,hora,dia,mes,ano)
+            listaCaidas.add(caida)
+        }
+        cursor.close()
+        db.close()
+        return listaCaidas
+    }
 }
