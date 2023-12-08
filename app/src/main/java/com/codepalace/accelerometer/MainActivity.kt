@@ -18,6 +18,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +30,6 @@ import com.codepalace.accelerometer.databinding.ActivityLoginBinding
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
-
     private lateinit var db: dbCaidasHelper
     private lateinit var sensorManager: SensorManager
     private lateinit var square: TextView
@@ -38,7 +39,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private val handler = Handler()
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -113,6 +113,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 } }
             countDownTimer.start() // Iniciar la cuenta atrás
         }
+        //TABLA DEL REGISTRO DE CAIDAS
+        val tablaCaidas:TableLayout =findViewById(R.id.tablaCaidas)
+        fun displaycaidas() {
+            var listaCaidas = db.get5registros()
+            }
         //BOTÓN DE LLAMADA//
         val callButton:Button = findViewById(R.id.callButton)
         callButton.visibility=View.GONE
@@ -149,6 +154,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 callButton.visibility = View.VISIBLE
                 val color = Color.RED
                 square.setBackgroundColor(color)
+                //displaycaidas()
                 startCountdown()
                 //suena_alarma()
             } else {
@@ -187,7 +193,6 @@ data class Valores(
         listaY.add(y)
         listaZ.add(z)
     }
-
     fun getMaximoX(): Float = listaX.maxOrNull() ?: 0.0f
     fun getMaximoY(): Float = listaY.maxOrNull() ?: 0.0f
     fun getMaximoZ(): Float = listaZ.maxOrNull() ?: 0.0f

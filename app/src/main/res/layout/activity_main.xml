@@ -49,6 +49,7 @@
         android:textColor="@color/black" />
 
     <TableLayout
+        android:id="@+id/tablaCaidas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
@@ -73,6 +74,7 @@
             android:showDividers="beginning|middle|end"
             android:dividerPadding="0dp"
             android:divider="#FF0000"
+
             >
             <TextView
                 android:padding="8dp"

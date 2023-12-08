@@ -9,8 +9,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="">
+    <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="Tabla en el activity_main.xml creada">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +19,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\ljalg\.android\avd\Pixel_7_API_34.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[5200be3a8c00c523]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -61,6 +62,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2Z86awHjZQaDiFavslZ5bLbn3mr" />
   <component name="ProjectViewState">
@@ -207,7 +211,14 @@
       <option name="project" value="LOCAL" />
       <updated>1702037823991</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Tabla en el activity_main.xml creada">
+      <created>1702049414114</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1702049414114</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -227,6 +238,7 @@
     <MESSAGE value="Intento creación base de datos de caidas" />
     <MESSAGE value="Creación BD caídas y registro" />
     <MESSAGE value="Creación de función en dbCaidasHelper&#10;que devuelve una lista con la clase Caidas que contiene los valores de las últimas 5 caidas" />
-    <option name="LAST_COMMIT_MESSAGE" value="Creación de función en dbCaidasHelper&#10;que devuelve una lista con la clase Caidas que contiene los valores de las últimas 5 caidas" />
+    <MESSAGE value="Tabla en el activity_main.xml creada" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tabla en el activity_main.xml creada" />
   </component>
 </project>
