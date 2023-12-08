@@ -24,11 +24,13 @@ import androidx.core.app.ActivityCompat
 import java.util.*
 import android.view.WindowManager
 import android.os.CountDownTimer
+import com.codepalace.accelerometer.databinding.ActivityLoginBinding
 import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
-
+    private lateinit var db:dbCaidasHelper
+    private lateinit var binding: MainActivity
     private lateinit var sensorManager: SensorManager
     private lateinit var square: TextView
     private lateinit var botonPopup: ImageButton
@@ -42,17 +44,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
+        db= dbCaidasHelper(this)
         // Keeps phone in light mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         botonPopup = findViewById(R.id.warning) // En lugar de val botonpopup: ImageButton = findViewById(R.id.warning)
         botonPopup.visibility = View.GONE
-        botonPopup.setOnClickListener {
-            // Ocultar el botón pop-up al hacer clic
-            botonPopup.visibility = View.GONE
-            limpiarVentanaTiempo()
-        }
+
         square = findViewById(R.id.tv_square)
         valores = Valores()
         setUpSensorStuff()
@@ -91,6 +89,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
                 Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
             } }
+        fun registrar_caida() {
+            val calendario = Calendar.getInstance()
+            val hora = calendario.get(Calendar.HOUR_OF_DAY) // Obtener la hora en formato de 24 horas
+            val minutos = calendario.get(Calendar.MINUTE)
+            val dia = calendario.get(Calendar.DAY_OF_MONTH)
+            val mes = calendario.get(Calendar.MONTH) + 1 // Los meses comienzan desde 0, por eso se suma 1
+            val anio = calendario.get(Calendar.YEAR)
+            ////////OBTENER EL MOMENTO DE LA CAÍDA Y GUARDARLO
+            val acc_x = valores.getMaximoX()
+            val acc_y = valores.getMaximoY()
+            val acc_z = valores.getMaximoZ()
+            val caida=Caidas(0,acc_x,acc_y,acc_z,minutos,hora,dia,mes,anio)
+            db.registroCaidas(caida)
+            Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
+        }
         fun startCountdown() {
             val countDownTimer = object :
                 CountDownTimer(10000, 1000) { // Cuenta atrás de 30 segundos (30000 milisegundos)
@@ -98,29 +111,24 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                     // Se ejecuta cada segundo mientras la cuenta atrás está en progreso
                 }
                 override fun onFinish() {
-                    // La cuenta atrás ha finalizado
-                    llamar()
+                    registrar_caida()
+                    //llamar() POR AHORA LA QUITO
                 } }
             countDownTimer.start() // Iniciar la cuenta atrás
-        }
-        fun obtenercalendario(): List <Int> {
-            val calendario = Calendar.getInstance()
-            val hora = calendario.get(Calendar.HOUR_OF_DAY) // Obtener la hora en formato de 24 horas
-            val minutos = calendario.get(Calendar.MINUTE)
-            val dia = calendario.get(Calendar.DAY_OF_MONTH)
-            val mes = calendario.get(Calendar.MONTH) + 1 // Los meses comienzan desde 0, por eso se suma 1
-            val anio = calendario.get(Calendar.YEAR)
-            return listOf(minutos,hora,dia,mes,anio)
         }
         //BOTÓN DE LLAMADA//
         val callButton:Button = findViewById(R.id.callButton)
         callButton.visibility=View.GONE
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
-            limpiarVentanaTiempo()
             llamar()
+            limpiarVentanaTiempo()
            }
-
+        botonPopup.setOnClickListener {
+            botonPopup.visibility = View.GONE
+            registrar_caida()
+            limpiarVentanaTiempo()
+        }
         if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             val X = event.values[0]
             val Y = event.values[1]
@@ -143,16 +151,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 square.setBackgroundColor(color)
                 startCountdown()
                //suena_alarma()
-
-                ////////OBTENER EL MOMENTO DE LA CAÍDA Y GUARDARLO
-                val acc_x = valores.getMaximoX()
-                val acc_y = valores.getMaximoY()
-                val acc_z = valores.getMaximoZ()
-                val (minutos,horas,dia,mes,ano) = obtenercalendario()
-                val db = DataBase(applicationContext,"SOSFall",null,1)
-                db.registra_caida(acc_x,acc_y,acc_z,minutos,horas,dia,mes,ano)
-
-                /////////////////////////////////////////////////////
             } else {
                 botonPopup.visibility = View.GONE
                 val color = Color.GREEN

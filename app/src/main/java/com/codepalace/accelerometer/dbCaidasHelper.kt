@@ -9,7 +9,7 @@ class dbCaidasHelper (context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     DATABASE_VERSION) {
     companion object{
         private const val DATABASE_NAME = "dbCaidas.db"
-        private const val DATABASE_VERSION ="1"
+        private const val DATABASE_VERSION =1
         private const val TABLE_NAME ="caidas"
         private const val COLUMN_id= "id"
         private const val COLUMN_acc_x= "acc_x"
@@ -37,7 +37,16 @@ class dbCaidasHelper (context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     fun registroCaidas(caidas: Caidas){
         val db = writableDatabase
         val values=ContentValues().apply {
-            put(COLUMN_acc_x)
+            put(COLUMN_acc_x,caidas.acc_x)
+            put(COLUMN_acc_y,caidas.acc_y)
+            put(COLUMN_acc_z,caidas.acc_z)
+            put(COLUMN_minuto,caidas.minuto)
+            put(COLUMN_acc_y,caidas.hora)
+            put(COLUMN_dia,caidas.dia)
+            put(COLUMN_mes,caidas.mes)
+            put(COLUMN_ano,caidas.ano)
         }
+        db.insert(TABLE_NAME, null,values)
+        db.close()
     }
 }
