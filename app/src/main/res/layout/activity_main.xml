@@ -13,8 +13,8 @@
         android:layout_height="200dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="102dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
         android:background="#EF5350"
         android:gravity="center"
         android:text="How are we doing today?"
@@ -29,10 +29,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="67dp"
-        android:layout_marginEnd="41dp"
-        android:layout_marginBottom="368dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="215dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="220dp"
         android:background="@mipmap/caida2"
         android:contentDescription="Warning icon"
         app:srcCompat="@mipmap/caida2" />
@@ -43,8 +43,200 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="153dp"
-        android:layout_marginBottom="262dp"
+        android:layout_marginEnd="253dp"
+        android:layout_marginBottom="110dp"
         android:text="Llamada"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:textColor="@color/white"
+        android:showDividers="beginning|middle|end"
+        android:dividerPadding="0dp"
+        android:divider="#FF0000">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EF5350"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Registro últimas 5 caídas"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#E48482"
+            android:showDividers="beginning|middle|end"
+            android:dividerPadding="0dp"
+            android:divider="#FF0000"
+            >
+            <TextView
+                android:padding="8dp"
+                android:text="Acc_x"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                />
+            <TextView
+                android:padding="8dp"
+                android:text="Acc_y"
+                android:layout_weight="1"
+                android:textColor="@color/white" />
+            <TextView
+                android:padding="8dp"
+                android:text="Acc_z"
+                android:layout_weight="1"
+                android:textColor="@color/white"/>
+            <TextView
+                android:padding="8dp"
+                android:text="Hora"
+                android:layout_weight="1"
+                android:textColor="@color/white" />
+            <TextView
+                android:padding="8dp"
+                android:text="Fecha"
+                android:layout_weight="1"
+                android:textColor="@color/white" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#E48482"
+            android:showDividers="beginning|middle|end"
+            android:dividerPadding="0dp"
+            android:divider="#FF0000"
+            >
+            <TextView
+                android:padding="8dp"
+                android:text="Acc_x"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                />
+            <TextView
+                android:padding="8dp"
+                android:text="Acc_y"
+                android:layout_weight="1"
+                android:textColor="@color/white" />
+            <TextView
+                android:padding="8dp"
+                android:text="Acc_z"
+                android:layout_weight="1"
+                android:textColor="@color/white"/>
+            <TextView
+                android:padding="8dp"
+                android:text="Hora"
+                android:layout_weight="1"
+                android:textColor="@color/white" />
+            <TextView
+                android:padding="8dp"
+                android:text="Fecha"
+                android:layout_weight="1"
+                android:textColor="@color/white" />
+        </TableRow><TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E48482"
+        android:showDividers="beginning|middle|end"
+        android:dividerPadding="0dp"
+        android:divider="#FF0000"
+        >
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_x"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_y"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_z"
+            android:layout_weight="1"
+            android:textColor="@color/white"/>
+        <TextView
+            android:padding="8dp"
+            android:text="Hora"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+        <TextView
+            android:padding="8dp"
+            android:text="Fecha"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+    </TableRow><TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E48482"
+        android:showDividers="beginning|middle|end"
+        android:dividerPadding="0dp"
+        android:divider="#FF0000"
+        >
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_x"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_y"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_z"
+            android:layout_weight="1"
+            android:textColor="@color/white"/>
+        <TextView
+            android:padding="8dp"
+            android:text="Hora"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+        <TextView
+            android:padding="8dp"
+            android:text="Fecha"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+    </TableRow><TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E48482"
+        android:showDividers="beginning|middle|end"
+        android:dividerPadding="0dp"
+        android:divider="#FF0000"
+        >
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_x"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            />
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_y"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+        <TextView
+            android:padding="8dp"
+            android:text="Acc_z"
+            android:layout_weight="1"
+            android:textColor="@color/white"/>
+        <TextView
+            android:padding="8dp"
+            android:text="Hora"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+        <TextView
+            android:padding="8dp"
+            android:text="Fecha"
+            android:layout_weight="1"
+            android:textColor="@color/white" />
+    </TableRow>
+    </TableLayout>
 </RelativeLayout>
