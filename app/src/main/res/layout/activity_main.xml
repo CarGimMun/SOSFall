@@ -47,6 +47,13 @@
         android:layout_marginBottom="262dp"
         android:text="Llamada"
         android:textColor="@color/black" />
+
+        <de.codecrafters.tableview.TableView
+            android:id="@+id/TablaRegistros"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:tableView_columnCount="5" ></de.codecrafters.tableview.TableView>
+
 </RelativeLayout>
 <!--
     <TextView

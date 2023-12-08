@@ -181,34 +181,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }
     /////////////ESTO NO SÉ SI TIENE QUE IR EN DATABASE O AQUÍ, HAY UNA COSA DE UN COMPANION QUE TIENE QUE VER, PERO NO SÉ QUÉ ES
-    fun obtenerDatosDeTabla(): ArrayList<String> {
-        val listaDatos = ArrayList<String>() // Lista para almacenar los datos recuperados
-        val db = DataBase(applicationContext, "DataBase", null, 1)
-        // Consulta para obtener todos los datos de la tabla
-        val query = "SELECT * FROM FALLS LIMIT 5" //
-        val cursor = db.readableDatabase.rawQuery(query, null)
-        // Iterar a través del cursor para obtener los datos
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    // Obtener los datos de cada columna (cambia los índices por los nombres de columnas reales)
-                    val acc_x = cursor.getFloat(cursor.getColumnIndex("acc_x"))
-                    val acc_y = cursor.getFloat(cursor.getColumnIndex("acc_y"))
-                    val acc_z = cursor.getFloat(cursor.getColumnIndex("acc_z"))
-                    val minuto = cursor.getInt(cursor.getColumnIndex("minuto"))
-                    val hora = cursor.getInt(cursor.getColumnIndex("hora"))
-                    val dia = cursor.getInt(cursor.getColumnIndex("dia"))
-                    val mes = cursor.getInt(cursor.getColumnIndex("mes"))
-                    val año = cursor.getInt(cursor.getColumnIndex("año"))
-                } while (cursor.moveToNext())
-            }
-            cursor.close()
-        }
-        // Devolver la lista de datos recuperados
-        return listaDatos
-    }
-    val registros = DataBase.obtenerDatosDeTabla()
-
 }
 
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)

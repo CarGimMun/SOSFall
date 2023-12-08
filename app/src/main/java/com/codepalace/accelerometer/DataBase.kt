@@ -1,5 +1,6 @@
 package com.codepalace.accelerometer
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -40,6 +41,7 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
         }
         return result
     }
+    @SuppressLint("Range")
     fun getContact(username: String?, password: String?): String{
         val sqLiteDatabase: SQLiteDatabase
         var phone:String=""
@@ -81,6 +83,5 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
         db_w.insert("FALLS", null, cv)
         db_w.close()
     }
-
      }
 
