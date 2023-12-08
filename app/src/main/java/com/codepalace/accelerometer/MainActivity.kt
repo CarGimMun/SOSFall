@@ -104,19 +104,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         fun startCountdown() {
             val countDownTimer = object :
                 CountDownTimer(10000, 1000) { // Cuenta atrás de 30 segundos (30000 milisegundos)
+                val contador: TextView= findViewById(R.id.contador)
                 override fun onTick(millisUntilFinished: Long) {
-                    // Se ejecuta cada segundo mientras la cuenta atrás está en progreso
+                    contador.text=millisUntilFinished.toString()
                 }
                 override fun onFinish() {
-                    registrar_caida()
+                //registrar_caida()
                    // llamar()// POR AHORA LA QUITO
-                } }
+                }}
             countDownTimer.start() // Iniciar la cuenta atrás
+            //countDownTimer.cancel()
         }
         //TABLA DEL REGISTRO DE CAIDAS
         val tablaCaidas:TableLayout =findViewById(R.id.tablaCaidas)
         fun displaycaidas() {
             var listaCaidas = db.get5registros()
+
             }
         //BOTÓN DE LLAMADA//
         val callButton:Button = findViewById(R.id.callButton)
@@ -130,7 +133,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         //BOTÓN POPUP//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
-            registrar_caida()
+            //registrar_caida() esto no debería estar aqui no?
             limpiarVentanaTiempo()
         }
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//

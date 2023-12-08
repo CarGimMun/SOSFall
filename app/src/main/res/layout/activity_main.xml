@@ -21,6 +21,17 @@
         android:textColor="@color/white"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/contador"
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:background="#EF5350"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="Buenas"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
     <ImageButton
         android:id="@+id/warning"
         android:layout_width="327dp"
@@ -74,7 +85,6 @@
             android:showDividers="beginning|middle|end"
             android:dividerPadding="0dp"
             android:divider="#FF0000"
-
             >
             <TextView
                 android:padding="8dp"

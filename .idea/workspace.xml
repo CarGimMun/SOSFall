@@ -9,7 +9,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="Tabla en el activity_main.xml creada">
+    <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="Tabla en el activity_main.xml creada y función con display creada sin funcionamiento. No consigo hacer que haya una raya horizontal entre las filas">
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
@@ -19,7 +25,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[5200be3a8c00c523]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[d5771404]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -218,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1702049414114</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Tabla en el activity_main.xml creada y función con display creada sin funcionamiento. No consigo hacer que haya una raya horizontal entre las filas">
+      <created>1702051769081</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1702051769081</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -239,6 +252,7 @@
     <MESSAGE value="Creación BD caídas y registro" />
     <MESSAGE value="Creación de función en dbCaidasHelper&#10;que devuelve una lista con la clase Caidas que contiene los valores de las últimas 5 caidas" />
     <MESSAGE value="Tabla en el activity_main.xml creada" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tabla en el activity_main.xml creada" />
+    <MESSAGE value="Tabla en el activity_main.xml creada y función con display creada sin funcionamiento. No consigo hacer que haya una raya horizontal entre las filas" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tabla en el activity_main.xml creada y función con display creada sin funcionamiento. No consigo hacer que haya una raya horizontal entre las filas" />
   </component>
 </project>
