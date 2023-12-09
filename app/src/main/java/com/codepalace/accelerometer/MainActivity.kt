@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private val handler = Handler()
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
+   
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
                 Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
             } }
+
         fun registrar_caida() {
             val calendario = Calendar.getInstance()
             val hora = calendario.get(Calendar.HOUR_OF_DAY) // Obtener la hora en formato de 24 horas
@@ -102,20 +104,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
         }
 
-        var countDownTimer = object :
+        var countDownTimer2 = object :
             CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
             val contador: TextView= findViewById(R.id.contador)
             override fun onTick(millisUntilFinished: Long) {
                 contador.text=millisUntilFinished.toString()
             }
             override fun onFinish() {
+//                llamar()// POR AHORA LA QUITO, extraño que funciona lo de 1 vez con sonar la alarma y no con llamar
                 //registrar_caida()
                 suena_alarma()
-            //llamar()// POR AHORA LA QUITO
             }}
-
         fun startCountdown() {
-            countDownTimer.start() // Iniciar la cuenta atrás
+            countDownTimer2.start() // Iniciar la cuenta atrás
+        }
+        fun stopCountdown(){
+            countDownTimer2.cancel()
         }
 
         //TABLA DEL REGISTRO DE CAIDAS
@@ -125,19 +129,19 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
         //BOTÓN DE LLAMADA//
-        val callButton:Button = findViewById(R.id.callButton)
+        val callButton:ImageButton = findViewById(R.id.callButton)
         callButton.visibility=View.GONE
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
             registrar_caida()
             llamar()
-            countDownTimer.cancel()
+            stopCountdown()
             limpiarVentanaTiempo()
         }
         //BOTÓN POPUP//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
-            countDownTimer.cancel()
+            stopCountdown()
             limpiarVentanaTiempo()
         }
 
@@ -166,15 +170,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 square.setBackgroundColor(color)
 
                 if  (contador_estado==1){
-                    countDownTimer.cancel()
+                    stopCountdown()
                 }else{
                     //displaycaidas()
                     startCountdown()///corregir lo de llamar aun cuando se pulse
                 }
-                var contador_estado=1
+                contador_estado=1
             } else {
-                var contador= 0
-                countDownTimer.cancel()
+                contador_estado= 0
+                stopCountdown()
                 valores.agregarValores(X, Y, Z)
                 botonPopup.visibility = View.GONE
                 var color = Color.GREEN

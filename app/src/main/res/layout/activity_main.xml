@@ -34,30 +34,30 @@
 
     <ImageButton
         android:id="@+id/warning"
-        android:layout_width="327dp"
-        android:layout_height="295dp"
+        android:layout_width="230dp"
+        android:layout_height="201dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="215dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="220dp"
-        android:background="@mipmap/caida2"
+        android:layout_marginStart="69dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="79dp"
+        android:layout_marginBottom="229dp"
+        android:background="@mipmap/estoy_bien"
         android:contentDescription="Warning icon"
-        app:srcCompat="@mipmap/caida2" />
+        app:srcCompat="@mipmap/estoy_bien" />
 
-    <Button
+    <ImageButton
         android:id="@+id/callButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="253dp"
-        android:layout_marginBottom="110dp"
-        android:text="Llamada"
-        android:textColor="@color/black" />
+        android:layout_marginEnd="237dp"
+        android:layout_marginBottom="40dp"
+        android:background="@mipmap/llamada"
+        />
 
     <TableLayout
         android:id="@+id/tablaCaidas"
