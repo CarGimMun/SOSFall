@@ -28,7 +28,6 @@ import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
-
     private lateinit var sensorManager: SensorManager
     private lateinit var square: TextView
     private lateinit var warning: ImageButton
@@ -43,26 +42,19 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-
-        // Keeps phone in light mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         square = findViewById(R.id.tv_square)
         warning = findViewById(R.id.warning) // En lugar de val botonpopup: ImageButton = findViewById(R.id.warning)
         warning.visibility = View.GONE
         warning.setOnClickListener {
-            // Ocultar el botón pop-up al hacer clic
             warning.visibility = View.GONE
-            // Programar la tarea para limpiar la ventana
             limpiarVentanaTiempo()
         }
         setUpSensorStuff()
 
     }
     private fun setUpSensorStuff() {
-        // Create the sensor manager
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-
-        // Specify the sensor you want to listen to
         sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)?.also { accelerometer ->
             sensorManager.registerListener(
                 this,
@@ -137,11 +129,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             val x = event.values[0]
             val y = event.values[1]
             val z = event.values[2]
-
-            // Agregar valores a la lista
             valores.agregarValores(x, y, z)
-
-            //Muestra por pantalla
             square.apply {
                 translationZ = z
                 translationX = x
@@ -149,7 +137,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
 
             //CAMBIO DE COLOR EN BASE AL OUTPUT SENSOR
-
             if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
                 // if (valores.getMaximoX().toFloat() == 0.toFloat()) {
                 warning.visibility = View.VISIBLE
@@ -165,7 +152,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 val accz = valores.getMaximoZ()
                 val (minutos,horas,dia,mes,ano) = obtenerCalendario()
                 val db = DataBase(applicationContext,"SOSFall",null,1)
-                db.registraCaida(accX,accy,accz,minutos,horas,dia,mes,ano)
+                db.registroCaidas(accX,accy,accz,minutos,horas,dia,mes,ano)
 
             } else {
                 warning.visibility = View.GONE
