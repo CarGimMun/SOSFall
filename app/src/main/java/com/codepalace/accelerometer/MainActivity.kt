@@ -101,26 +101,29 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             db.registroCaidas(caida)
             Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
         }
-        fun startCountdown() {
-            val countDownTimer = object :
-                CountDownTimer(10000, 1000) { // Cuenta atrás de 30 segundos (30000 milisegundos)
-                val contador: TextView= findViewById(R.id.contador)
-                override fun onTick(millisUntilFinished: Long) {
-                    contador.text=millisUntilFinished.toString()
-                }
-                override fun onFinish() {
+
+        var countDownTimer = object :
+            CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
+            val contador: TextView= findViewById(R.id.contador)
+            override fun onTick(millisUntilFinished: Long) {
+                contador.text=millisUntilFinished.toString()
+            }
+            override fun onFinish() {
                 //registrar_caida()
-                   // llamar()// POR AHORA LA QUITO
-                }}
+                suena_alarma()
+            //llamar()// POR AHORA LA QUITO
+            }}
+
+        fun startCountdown() {
             countDownTimer.start() // Iniciar la cuenta atrás
-            //countDownTimer.cancel()
         }
+
         //TABLA DEL REGISTRO DE CAIDAS
         val tablaCaidas:TableLayout =findViewById(R.id.tablaCaidas)
         fun displaycaidas() {
             var listaCaidas = db.get5registros()
+        }
 
-            }
         //BOTÓN DE LLAMADA//
         val callButton:Button = findViewById(R.id.callButton)
         callButton.visibility=View.GONE
@@ -128,14 +131,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             callButton.visibility = View.GONE
             registrar_caida()
             llamar()
+            countDownTimer.cancel()
             limpiarVentanaTiempo()
         }
         //BOTÓN POPUP//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
-            //registrar_caida() esto no debería estar aqui no?
+            countDownTimer.cancel()
             limpiarVentanaTiempo()
         }
+
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//
         if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             val X = event.values[0]
@@ -150,20 +155,29 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 "Máximo X: ${valores.getMaximoX().format(2)}\n" +
                     "Máximo Y: ${valores.getMaximoY().format(2)}\n" +
                     "Máximo Z: ${valores.getMaximoZ().format(2)}"
+
             //MODIFICACIÓN DE UMBRAL Y LÓGICA DE CAÍDAS//
+            var contador_estado: Int =0
             if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
                 //     if (valores.getMaximoX().toFloat() == 0.toFloat()) {
                 botonPopup.visibility = View.VISIBLE
                 callButton.visibility = View.VISIBLE
-                val color = Color.RED
+                var color = Color.RED
                 square.setBackgroundColor(color)
-                //displaycaidas()
-                startCountdown()
-                //suena_alarma()
+
+                if  (contador_estado==1){
+                    countDownTimer.cancel()
+                }else{
+                    //displaycaidas()
+                    startCountdown()///corregir lo de llamar aun cuando se pulse
+                }
+                var contador_estado=1
             } else {
+                var contador= 0
+                countDownTimer.cancel()
                 valores.agregarValores(X, Y, Z)
                 botonPopup.visibility = View.GONE
-                val color = Color.GREEN
+                var color = Color.GREEN
                 square.setBackgroundColor(color)
                 tiempoInicioCondicion = 0L
             }}}
@@ -173,7 +187,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onDestroy() {
         sensorManager.unregisterListener(this)
         super.onDestroy()
-
         mediaPlayer?.release()
         mediaPlayer = null
     }
@@ -183,9 +196,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // Programar la próxima limpieza después de un segundo
         handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }}
-
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)
-
 data class Valores(
     private val listaX: MutableList<Float> = mutableListOf(),
     private val listaY: MutableList<Float> = mutableListOf(),
