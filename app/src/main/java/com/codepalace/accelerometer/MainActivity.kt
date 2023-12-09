@@ -68,9 +68,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
+        val resourceId = R.raw.alarma
+        mediaPlayer = MediaPlayer.create(this, resourceId)
         fun suena_alarma(){
-            val resourceId = R.raw.alarma
-            mediaPlayer = MediaPlayer.create(this, resourceId)
             mediaPlayer?.start()
         }
         fun llamar() {
@@ -135,6 +135,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             callButton.visibility = View.GONE
             registrar_caida()
             llamar()
+            countDownTimer2.cancel()
             stopCountdown()
             limpiarVentanaTiempo()
         }
@@ -142,6 +143,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
             stopCountdown()
+            countDownTimer2.cancel()
+            mediaPlayer?.stop()
             limpiarVentanaTiempo()
         }
 
@@ -171,14 +174,20 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
                 if  (contador_estado==1){
                     stopCountdown()
+                    countDownTimer2.cancel()
+                    mediaPlayer?.stop()
                 }else{
                     //displaycaidas()
                     startCountdown()///corregir lo de llamar aun cuando se pulse
+                    mediaPlayer?.stop()
                 }
                 contador_estado=1
             } else {
                 contador_estado= 0
                 stopCountdown()
+                countDownTimer2.cancel()
+                mediaPlayer?.stop()
+
                 valores.agregarValores(X, Y, Z)
                 botonPopup.visibility = View.GONE
                 var color = Color.GREEN
