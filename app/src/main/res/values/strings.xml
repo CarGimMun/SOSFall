@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">SOSFall</string>
+    <string name= "MaxText"> Máximo X: ${valores.getMaximoX().format(2)}\n
+        Máximo Y: ${valores.getMaximoY().format(2)}\n
+        Máximo Z: ${valores.getMaximoZ().format(2)}</string>
 </resources>
