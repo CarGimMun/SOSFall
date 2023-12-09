@@ -10,9 +10,19 @@
   </component>
   <component name="ChangeListManager">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="">
+=======
+    <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="Subir previa">
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.2/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/DataBase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/DataBase.kt" afterDir="false" />
     </list>
 =======
     <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="" />
@@ -127,6 +137,105 @@
       <option name="presentableId" value="Default" />
       <updated>1701791427479</updated>
     </task>
+<<<<<<< Updated upstream
     <servers />
   </component>
+=======
+    <task id="LOCAL-00001" summary="Intento de crear tabla de datos">
+      <created>1701809781716</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1701809781716</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Añadir lo de obtener registros_5 pero aún no funciona y hay que modificarlo">
+      <created>1701891479470</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1701891479470</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Añadir lo de obtener registros_5 pero aún no funciona y hay que modificarlo">
+      <created>1701892054452</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1701892054452</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Intento creación base de datos de caidas">
+      <created>1702032854956</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702032854956</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Creación BD caídas y registro">
+      <created>1702034884620</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1702034884620</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Creación de función en dbCaidasHelper&#10;que devuelve una lista con la clase Caidas que contiene los valores de las últimas 5 caidas">
+      <created>1702037823991</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1702037823991</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Tabla en el activity_main.xml creada">
+      <created>1702049414114</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1702049414114</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Tabla en el activity_main.xml creada y función con display creada sin funcionamiento. No consigo hacer que haya una raya horizontal entre las filas">
+      <created>1702051769081</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1702051769081</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Hay un print del contador para ver que efectivamente está mal y que no para de empezar el código. En cuanto se solucione esto ya sería clave, la alarma, llamar y registrar caídas funcionaría, quizás podemos establecer un estado, para el if cuando está rojo">
+      <created>1702068424499</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1702068424499</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Subir previa">
+      <created>1702142989541</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1702142989541</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Intento de crear tabla de datos" />
+    <MESSAGE value="Añadir lo de obtener registros_5 pero aún no funciona y hay que modificarlo" />
+    <MESSAGE value="Intento creación base de datos de caidas" />
+    <MESSAGE value="Creación BD caídas y registro" />
+    <MESSAGE value="Creación de función en dbCaidasHelper&#10;que devuelve una lista con la clase Caidas que contiene los valores de las últimas 5 caidas" />
+    <MESSAGE value="Tabla en el activity_main.xml creada" />
+    <MESSAGE value="Tabla en el activity_main.xml creada y función con display creada sin funcionamiento. No consigo hacer que haya una raya horizontal entre las filas" />
+    <MESSAGE value="Hay un print del contador para ver que efectivamente está mal y que no para de empezar el código. En cuanto se solucione esto ya sería clave, la alarma, llamar y registrar caídas funcionaría, quizás podemos establecer un estado, para el if cuando está rojo" />
+    <MESSAGE value="Subir previa" />
+    <option name="LAST_COMMIT_MESSAGE" value="Subir previa" />
+  </component>
+>>>>>>> Stashed changes
 </project>
