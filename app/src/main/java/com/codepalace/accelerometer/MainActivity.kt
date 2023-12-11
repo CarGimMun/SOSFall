@@ -86,22 +86,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
         //TAREA ASÍNCRONA CUYA FUNCIÓN ES QUE NO SE BLOQUEE EL HILO PRINCIPAL CUANDO SE EJECUTA. DEPRECATED PERO HACE SU FUNCIÓN
-        class PlayAlarmTask(private val context: Context) : AsyncTask<Void, Void, Void>() {
-            override fun doInBackground(vararg params: Void?): Void? {
-                val resourceId = R.raw.alarma
-                mediaPlayer = MediaPlayer.create(context,resourceId)
-                mediaPlayer?.start()
-                return null
-            }
-            override fun onPostExecute(result: Void?) {
-                mediaPlayer?.stop()
-                mediaPlayer?.release()
-                mediaPlayer = null
-            }
-            override fun onCancelled() {
-            }
+        fun suena_alarma(){
+            val resourceId = R.raw.alarma
+            mediaPlayer = MediaPlayer.create(this, resourceId)
+            mediaPlayer?.start()
         }
-        val playAlarmTask = PlayAlarmTask(this) //Hay que pasarle el contexto porque sino se cree que es dentro de la clase
 
         //FUNCIÓN QUE LLAMA A TU CONTACTO
         fun llamar() {
@@ -202,19 +191,19 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 callButton.visibility = View.VISIBLE
                 var color = Color.RED
                 square.setBackgroundColor(color)
-
+                displaycaidas()
                 if  (contador_estado==1){
-
                     stopCountdown(countDownTimer2) //ya te has caído, sigues en estado rojo
                     //intento de cancelar cada contador que venga detrás
                 }else{
-                    playAlarmTask.execute() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
+                    suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
                     displaycaidas() //renueva los datos de la caída
                     startCountdown() //se ha caído por primera vez, comienza el estdo caída
                 }
                 contador_estado=1
             } else { //no se ha caído
                 contador_estado= 0 //ESTADO NO CAÍDA
+                displaycaidas()
                 stopCountdown(countDownTimer2) //PROBAR A QUITAR
                 valores.agregarValores(X, Y, Z)
                 var color = Color.GREEN

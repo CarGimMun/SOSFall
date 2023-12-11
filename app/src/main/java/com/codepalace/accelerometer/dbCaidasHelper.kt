@@ -41,7 +41,7 @@ class dbCaidasHelper (context: Context): SQLiteOpenHelper(context, DATABASE_NAME
             put(COLUMN_acc_y,caidas.acc_y)
             put(COLUMN_acc_z,caidas.acc_z)
             put(COLUMN_minuto,caidas.minuto)
-            put(COLUMN_acc_y,caidas.hora)
+            put(COLUMN_hora,caidas.hora)
             put(COLUMN_dia,caidas.dia)
             put(COLUMN_mes,caidas.mes)
             put(COLUMN_ano,caidas.ano)
