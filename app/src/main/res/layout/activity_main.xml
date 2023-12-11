@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#131313"
+    android:background="#121313"
     tools:context="MainActivity">
 
     <TextView
@@ -13,49 +13,79 @@
         android:layout_height="200dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="102dp"
-        android:layout_marginBottom="29dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
         android:background="#EF5350"
         android:gravity="center"
         android:text="How are we doing today?"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/andargif"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="33dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="307dp"
+        android:src="@drawable/andargif"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/contador"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="247dp"
+        android:background="#BF2825"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="Buenas"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/callButton"
+        android:layout_width="wrap_content"
+        android:layout_height="159dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="84dp"
+        android:layout_marginEnd="158dp"
+        android:layout_marginBottom="279dp"
+        android:background="@mipmap/llamada1"
+        android:contentDescription="Iniciando llamada de emergencia" />
+
     <ImageButton
         android:id="@+id/warning"
-        android:layout_width="327dp"
-        android:layout_height="295dp"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="67dp"
-        android:layout_marginEnd="41dp"
-        android:layout_marginBottom="368dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="-3dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="438dp"
         android:background="@mipmap/caida2"
         android:contentDescription="Warning icon"
+        android:visibility="invisible"
         app:srcCompat="@mipmap/caida2" />
 
-    <Button
-        android:id="@+id/callButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ListView
+        android:id="@+id/lista_registros"
+        android:layout_width="406dp"
+        android:layout_height="249dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="153dp"
-        android:layout_marginBottom="262dp"
-        android:text="Llamada"
-        android:textColor="@color/black" />
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="3dp"
+        android:background="#E48482"
+        android:showDividers="beginning|middle|end"
+        android:textColor="@color/white" />
 </RelativeLayout>
-<!--
-    <TextView
-        android:id="@+id/registro_caidas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    android:padding="100dp"
-    android:textSize="16sp"
-    android:textColor="#000000"
-    android:background="#ffffff"
-    android:layout_marginTop="16dp" />-!>
-

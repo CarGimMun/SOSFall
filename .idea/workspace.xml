@@ -9,45 +9,116 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="">
+    <list default="true" id="3c513f70-9077-4e83-9de6-5b4f8498dfb4" name="Changes" comment="Mismos errores que antes pero con la interfaz final">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/DataBase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/DataBase.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/carmengimenezmunoz/.android/avd/Final_dev.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[5200be3a8c00c523]" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/app">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SOSFALL" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SOSFALL" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SOSFALL" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="SOSFALL" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="other" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="2c521afa-e035-4a3d-bc0f-cf8dbfd1c2d6" />
+        <option name="url" value="https://github.com/CarGimMun/SOSFall.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2Z86awHjZQaDiFavslZ5bLbn3mr" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/carmengimenezmunoz/Documents/Android Studio/SOSFall/app/src/main/res",
-    "two.files.diff.last.used.file": "/Users/carmengimenezmunoz/Downloads/Lidia/Lidia/app/src/main/java/com/codepalace/accelerometer/MainActivity.kt"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ljalg/AndroidStudioProjects/SOSFall-Github-Carmen/SOSFall&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/src/main/res" />
+      <recent name="C:\Users\ljalg\AndroidStudioProjects\SOSFall-Github-Carmen\SOSFall\app\src\main\res\raw" />
+      <recent name="C:\Users\ljalg\AndroidStudioProjects\SOSFall-Github-Carmen\SOSFall\app\src\main\res" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ljalg\AndroidStudioProjects\SOSFall-Github-Carmen\SOSFall\app\src\main\res\mipmap-hdpi" />
+      <recent name="C:\Users\ljalg\AndroidStudioProjects\SOSFall-Github-Carmen\SOSFall\app\src\main\res\drawable" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.codepalace.accelerometer" />
     </key>
   </component>
   <component name="RunManager">
@@ -127,6 +198,116 @@
       <option name="presentableId" value="Default" />
       <updated>1701791427479</updated>
     </task>
+    <task id="LOCAL-00001" summary="Intento de crear tabla de datos">
+      <created>1701809781716</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1701809781716</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Añadir lo de obtener registros_5 pero aún no funciona y hay que modificarlo">
+      <created>1701891479470</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1701891479470</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Añadir lo de obtener registros_5 pero aún no funciona y hay que modificarlo">
+      <created>1701892054452</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1701892054452</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Intento creación base de datos de caidas">
+      <created>1702032854956</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702032854956</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Creación BD caídas y registro">
+      <created>1702034884620</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1702034884620</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Creación de función en dbCaidasHelper&#10;que devuelve una lista con la clase Caidas que contiene los valores de las últimas 5 caidas">
+      <created>1702037823991</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1702037823991</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Tabla en el activity_main.xml creada">
+      <created>1702049414114</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1702049414114</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Tabla en el activity_main.xml creada y función con display creada sin funcionamiento. No consigo hacer que haya una raya horizontal entre las filas">
+      <created>1702051769081</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1702051769081</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Hay un print del contador para ver que efectivamente está mal y que no para de empezar el código. En cuanto se solucione esto ya sería clave, la alarma, llamar y registrar caídas funcionaría, quizás podemos establecer un estado, para el if cuando está rojo">
+      <created>1702068424499</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1702068424499</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Primer Commit">
+      <created>1702224876014</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1702224876014</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Alarma funcionando, contador sigue sin cancelar">
+      <created>1702312316002</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1702312316002</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Mismos errores que antes pero con la interfaz final">
+      <created>1702314691884</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1702314691884</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Intento de crear tabla de datos" />
+    <MESSAGE value="Añadir lo de obtener registros_5 pero aún no funciona y hay que modificarlo" />
+    <MESSAGE value="Intento creación base de datos de caidas" />
+    <MESSAGE value="Creación BD caídas y registro" />
+    <MESSAGE value="Creación de función en dbCaidasHelper&#10;que devuelve una lista con la clase Caidas que contiene los valores de las últimas 5 caidas" />
+    <MESSAGE value="Tabla en el activity_main.xml creada" />
+    <MESSAGE value="Tabla en el activity_main.xml creada y función con display creada sin funcionamiento. No consigo hacer que haya una raya horizontal entre las filas" />
+    <MESSAGE value="Hay un print del contador para ver que efectivamente está mal y que no para de empezar el código. En cuanto se solucione esto ya sería clave, la alarma, llamar y registrar caídas funcionaría, quizás podemos establecer un estado, para el if cuando está rojo" />
+    <MESSAGE value="Primer Commit" />
+    <MESSAGE value="Alarma funcionando, contador sigue sin cancelar" />
+    <MESSAGE value="Mismos errores que antes pero con la interfaz final" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mismos errores que antes pero con la interfaz final" />
   </component>
 </project>

@@ -1,5 +1,6 @@
 package com.codepalace.accelerometer
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -9,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DataBase(context: Context?, name: String?, factory: CursorFactory?, version: Int) :
     SQLiteOpenHelper(context, name, factory, version) {
-    private val  dbR: SQLiteDatabase = readableDatabase
-    private val  dbW: SQLiteDatabase = writableDatabase
+    val  db_r=readableDatabase
+    val db_w=writableDatabase
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
         val qr1 = "create table USERS(username,email,contact,password)"
         sqLiteDatabase.execSQL(qr1)
@@ -23,8 +24,8 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
         cv.put("email", email)
         cv.put("contact", contact)
         cv.put("password", password)
-        dbW.insert("USERS", null, cv)
-        dbW.close()
+        db_w.insert("USERS", null, cv)
+        db_w.close()
     }
 
     fun login(username: String?, password: String?): Int {
@@ -32,45 +33,34 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
         val str = arrayOfNulls<String>(2)
         str[0] = username
         str[1] = password
-        val c = dbR.rawQuery("select * from USERS where ?=username and ?=password", str)
+        val c = db_r.rawQuery("select * from USERS where ?=username and ?=password", str)
         if (c.moveToFirst()) {
             result = 1
-            c.close()
         }
         return result
     }
+    @SuppressLint("Range")
     fun getContact(username: String?, password: String?): String{
-        var phone:String
+        val sqLiteDatabase: SQLiteDatabase
+        var phone:String=""
         val str = arrayOfNulls<String>(2)
         str[0] = username
         str[1] = password
-        val cursor: Cursor=dbR.rawQuery("select contact from USERS where  ?=username and  ?=password ",str)
-        cursor.moveToFirst()
-        phone=cursor.getString(cursor.getColumnIndex("contact"))
-        if( phone==""){
+        val cursor: Cursor=db_r.rawQuery("select contact from USERS where  ?=username and  ?=password ",str)
+        if(cursor != null){
+            val col=cursor.columnCount
+            val indexx=cursor.getColumnIndex("contact")
+            val rows:Int=cursor.count
+            if(cursor.moveToFirst()){
+                phone=cursor.getString(cursor.getColumnIndex("contact"))
+            }else{
                 cursor.close()
                 phone="112"
+            }
+        } else{
+            phone="112"
         }
         return phone
     }
-    fun registraCaida(accX: Float?, accY: Float?, accZ:Float?,
-        hora: Int?, minuto: Int?, dia: Int?, mes: Int?, anio: Int?) {
-        val cv = ContentValues()
-        cv.put("accX", accX)
-        cv.put("accY", accY)
-        cv.put("accZ", accZ)
-        cv.put("hora", hora)
-        cv.put("minuto",minuto)
-        cv.put("dia", dia)
-        cv.put("mes", mes)
-        cv.put("año", anio)
-        dbW.insert("FALLS", null, cv)
-        dbW.close()
-    }
+     }
 
-    fun obtenerRegistros(){
-        val registros = mutableListOf<String>()
-        val db = this.dbR
-    }
-
-}
