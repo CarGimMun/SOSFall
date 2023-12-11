@@ -33,6 +33,7 @@ import java.util.Calendar
 import android.os.AsyncTask
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import pl.droidsonroids.gif.GifImageView
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -57,9 +58,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         botonPopup = findViewById(R.id.warning)
         botonPopup.visibility = View.GONE
-
         square = findViewById(R.id.tv_square)
         valores = Valores()
+
         setUpSensorStuff()
 
         fun displaycaidas() {
@@ -85,7 +86,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
-        //TAREA ASÍNCRONA CUYA FUNCIÓN ES QUE NO SE BLOQUEE EL HILO PRINCIPAL CUANDO SE EJECUTA. DEPRECATED PERO HACE SU FUNCIÓN
         fun suena_alarma(){
             val resourceId = R.raw.alarma
             mediaPlayer = MediaPlayer.create(this, resourceId)
@@ -169,6 +169,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             //no se registra caída ni se llama porque es para falsa alarma
         }
 
+        val warning :ImageButton=findViewById(R.id.warning)
+        val andargif: GifImageView = findViewById(R.id.andargif)
+
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//
         if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             val X = event.values[0]
@@ -188,6 +191,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
             //          if (valores.getMaximoX().toFloat() == 0.toFloat()) {
                 botonPopup.visibility = View.VISIBLE
+                andargif.visibility = View.INVISIBLE
+                warning.visibility = View.VISIBLE
                 callButton.visibility = View.VISIBLE
                 var color = Color.RED
                 square.setBackgroundColor(color)
@@ -207,7 +212,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 stopCountdown(countDownTimer2) //PROBAR A QUITAR
                 valores.agregarValores(X, Y, Z)
                 var color = Color.GREEN
+                andargif.visibility = View.VISIBLE
                 square.setBackgroundColor(color)
+                warning.visibility = View.INVISIBLE
             }}}
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
         // Implementar si la precisión del sensor cambia
