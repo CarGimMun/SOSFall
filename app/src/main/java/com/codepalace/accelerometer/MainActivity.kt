@@ -91,22 +91,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             mediaPlayer = MediaPlayer.create(this, resourceId)
             mediaPlayer?.start()
         }
-
-        //FUNCIÓN QUE LLAMA A TU CONTACTO
-        fun llamar() {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                val it=intent
-                val username=it.getStringExtra("username")
-                val password=it.getStringExtra("password")
-                val db = DataBase(applicationContext,"SOSFall",null,1)
-                val telf = db.getContact(username = username, password = password) // Tu número de teléfono
-                val intent = Intent(Intent.ACTION_CALL)
-                intent.data = Uri.parse("tel:$telf")
-                startActivity(intent)
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
-                Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
-            }}
         //REISTRAR CAÍDAS
         fun registrar_caida() {
             val calendario = Calendar.getInstance()
@@ -123,22 +107,39 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             db.registroCaidas(caida)
             Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
         }
-        //DECLARACIÓN DEL CONTADOR
-        var countDownTimer2 = object:
+        //FUNCIÓN QUE LLAMA A TU CONTACTO
+        fun llamar() {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                val it=intent
+                val username=it.getStringExtra("username")
+                val password=it.getStringExtra("password")
+                val db = DataBase(applicationContext,"SOSFall",null,1)
+                val telf = db.getContact(username = username, password = password) // Tu número de teléfono
+                val intent = Intent(Intent.ACTION_CALL)
+                intent.data = Uri.parse("tel:$telf")
+                startActivity(intent)
+                //  registrar_caida()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
+                Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
+            }}
+        val countDownTimer2 = object:
             CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
-           val contador: TextView= findViewById(R.id.contador)
+            val contador: TextView= findViewById(R.id.contador)
             override fun onTick(millisUntilFinished: Long) {
                 contador.setText("seconds remaining: " + millisUntilFinished / 1000+ "Estado: "+ contador_estado)
             }
             override fun onFinish() {
-                llamar()
                 registrar_caida()
+                llamar()
                 //playAlarmTask.execute()
-            }}
+            }
+        }
+        //DECLARACIÓN DEL CONTADOR
         fun startCountdown() {
             countDownTimer2.start()
         }
-        fun stopCountdown(countDownTimer2: CountDownTimer){
+        fun stopCountdown(){
             countDownTimer2.cancel()
         }
         ///MOSTRAR LAS CAÍDAS DEL USUARIO POR PANTALLA
@@ -158,13 +159,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             callButton.visibility = View.GONE
             registrar_caida()
             llamar()
-            stopCountdown(countDownTimer2)
+            stopCountdown()
             limpiarVentanaTiempo()
         }
         //BOTÓN POPUP//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
-            stopCountdown(countDownTimer2)
+            stopCountdown()
             limpiarVentanaTiempo()
             //no se registra caída ni se llama porque es para falsa alarma
         }
@@ -198,7 +199,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 square.setBackgroundColor(color)
                 displaycaidas()
                 if  (contador_estado==1){
-                    stopCountdown(countDownTimer2) //ya te has caído, sigues en estado rojo
+                    stopCountdown() //ya te has caído, sigues en estado rojo
                     //intento de cancelar cada contador que venga detrás
                 }else{
                     suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
@@ -209,13 +210,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             } else { //no se ha caído
                 contador_estado= 0 //ESTADO NO CAÍDA
                 displaycaidas()
-                stopCountdown(countDownTimer2) //PROBAR A QUITAR
+                stopCountdown() //PROBAR A QUITAR
                 valores.agregarValores(X, Y, Z)
                 var color = Color.GREEN
                 andargif.visibility = View.VISIBLE
                 square.setBackgroundColor(color)
                 warning.visibility = View.INVISIBLE
-            }}}
+            }
+        if (contador_estado==0){stopCountdown()} //redundante pero lo dejo
+        }}
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
         // Implementar si la precisión del sensor cambia
     }
