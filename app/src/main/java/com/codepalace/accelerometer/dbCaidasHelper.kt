@@ -52,7 +52,7 @@ class dbCaidasHelper (context: Context): SQLiteOpenHelper(context, DATABASE_NAME
     fun get5registros():List<Caidas>{
         val listaCaidas= mutableListOf<Caidas>()
         val db=readableDatabase
-        val query="SELECT * FROM $TABLE_NAME LIMIT 5"
+        val query="SELECT * FROM $TABLE_NAME ORDER BY id DESC LIMIT 5"
         val cursor=db.rawQuery(query,null)
         while(cursor.moveToNext()) {
             val id =cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_id))

@@ -2,6 +2,7 @@ package com.codepalace.accelerometer
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.media.MediaPlayer
+import android.media.MediaPlayer.create
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -28,6 +30,10 @@ import androidx.core.app.ActivityCompat
 import java.util.*
 import com.codepalace.accelerometer.databinding.ActivityLoginBinding
 import java.util.Calendar
+import android.os.AsyncTask
+import android.widget.ArrayAdapter
+import android.widget.ListView
+
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var db: dbCaidasHelper
@@ -39,6 +45,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private val handler = Handler()
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
+    var contador_estado: Int =0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +61,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         square = findViewById(R.id.tv_square)
         valores = Valores()
         setUpSensorStuff()
+
+        fun displaycaidas() {
+            db = dbCaidasHelper(this) // Inicializa tu DBHelper con el contexto
+            val listView : ListView = findViewById(R.id.lista_registros)
+            var listaCaidas = db.get5registros()
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaCaidas)
+            listView.adapter = adapter
+        }
+        displaycaidas()
     }
 
     private fun setUpSensorStuff() {
@@ -68,11 +85,25 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
-        fun suena_alarma(){
-            val resourceId = R.raw.alarma
-            mediaPlayer = MediaPlayer.create(this, resourceId)
-            mediaPlayer?.start()
+        //TAREA ASÍNCRONA CUYA FUNCIÓN ES QUE NO SE BLOQUEE EL HILO PRINCIPAL CUANDO SE EJECUTA. DEPRECATED PERO HACE SU FUNCIÓN
+        class PlayAlarmTask(private val context: Context) : AsyncTask<Void, Void, Void>() {
+            override fun doInBackground(vararg params: Void?): Void? {
+                val resourceId = R.raw.alarma
+                mediaPlayer = MediaPlayer.create(context,resourceId)
+                mediaPlayer?.start()
+                return null
+            }
+            override fun onPostExecute(result: Void?) {
+                mediaPlayer?.stop()
+                mediaPlayer?.release()
+                mediaPlayer = null
+            }
+            override fun onCancelled() {
+            }
         }
+        val playAlarmTask = PlayAlarmTask(this) //Hay que pasarle el contexto porque sino se cree que es dentro de la clase
+
+        //FUNCIÓN QUE LLAMA A TU CONTACTO
         fun llamar() {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 val it=intent
@@ -86,8 +117,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
                 Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
-            } }
-
+            }}
+        //REISTRAR CAÍDAS
         fun registrar_caida() {
             val calendario = Calendar.getInstance()
             val hora = calendario.get(Calendar.HOUR_OF_DAY) // Obtener la hora en formato de 24 horas
@@ -103,29 +134,32 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             db.registroCaidas(caida)
             Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
         }
-
-        var countDownTimer2 = object :
+        //DECLARACIÓN DEL CONTADOR
+        var countDownTimer2 = object:
             CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
-            val contador: TextView= findViewById(R.id.contador)
+           val contador: TextView= findViewById(R.id.contador)
             override fun onTick(millisUntilFinished: Long) {
-                contador.text=millisUntilFinished.toString()
+                contador.setText("seconds remaining: " + millisUntilFinished / 1000+ "Estado: "+ contador_estado)
             }
             override fun onFinish() {
-//                llamar()// POR AHORA LA QUITO, extraño que funciona lo de 1 vez con sonar la alarma y no con llamar
-                //registrar_caida()
-                suena_alarma()
+                llamar()
+                registrar_caida()
+                //playAlarmTask.execute()
             }}
         fun startCountdown() {
-            countDownTimer2.start() // Iniciar la cuenta atrás
+            countDownTimer2.start()
         }
-        fun stopCountdown(){
+        fun stopCountdown(countDownTimer2: CountDownTimer){
             countDownTimer2.cancel()
         }
-
-        //TABLA DEL REGISTRO DE CAIDAS
-        val tablaCaidas:TableLayout =findViewById(R.id.tablaCaidas)
+        ///MOSTRAR LAS CAÍDAS DEL USUARIO POR PANTALLA
         fun displaycaidas() {
+            db = dbCaidasHelper(this) // Inicializa tu DBHelper con el contexto
+            val listView : ListView = findViewById(R.id.lista_registros)
             var listaCaidas = db.get5registros()
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaCaidas)
+            listView.adapter = adapter
         }
 
         //BOTÓN DE LLAMADA//
@@ -135,14 +169,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             callButton.visibility = View.GONE
             registrar_caida()
             llamar()
-            stopCountdown()
+            stopCountdown(countDownTimer2)
             limpiarVentanaTiempo()
         }
         //BOTÓN POPUP//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
-            stopCountdown()
+            stopCountdown(countDownTimer2)
             limpiarVentanaTiempo()
+            //no se registra caída ni se llama porque es para falsa alarma
         }
 
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//
@@ -161,29 +196,29 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                         "Máximo Z: ${valores.getMaximoZ().format(2)}"
 
             //MODIFICACIÓN DE UMBRAL Y LÓGICA DE CAÍDAS//
-            var contador_estado: Int =0
             if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
-                //     if (valores.getMaximoX().toFloat() == 0.toFloat()) {
+            //          if (valores.getMaximoX().toFloat() == 0.toFloat()) {
                 botonPopup.visibility = View.VISIBLE
                 callButton.visibility = View.VISIBLE
                 var color = Color.RED
                 square.setBackgroundColor(color)
 
                 if  (contador_estado==1){
-                    stopCountdown()
+
+                    stopCountdown(countDownTimer2) //ya te has caído, sigues en estado rojo
+                    //intento de cancelar cada contador que venga detrás
                 }else{
-                    //displaycaidas()
-                    startCountdown()///corregir lo de llamar aun cuando se pulse
+                    playAlarmTask.execute() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
+                    displaycaidas() //renueva los datos de la caída
+                    startCountdown() //se ha caído por primera vez, comienza el estdo caída
                 }
                 contador_estado=1
-            } else {
-                contador_estado= 0
-                stopCountdown()
+            } else { //no se ha caído
+                contador_estado= 0 //ESTADO NO CAÍDA
+                stopCountdown(countDownTimer2) //PROBAR A QUITAR
                 valores.agregarValores(X, Y, Z)
-                botonPopup.visibility = View.GONE
                 var color = Color.GREEN
                 square.setBackgroundColor(color)
-                tiempoInicioCondicion = 0L
             }}}
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
         // Implementar si la precisión del sensor cambia
@@ -197,7 +232,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private fun limpiarVentanaTiempo() {
         // Limpiar valores fuera de la ventana de tiempo
         valores.limpiarVentanaTiempo(System.currentTimeMillis() - ventanaTiempo)
-        // Programar la próxima limpieza después de un segundo
+        // Programar la próxima limpieza después de horas
         handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }}
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)
