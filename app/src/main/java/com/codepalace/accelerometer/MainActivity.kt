@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
     var contador_estado: Int =0
+    private lateinit var pruebastop:Button
+    private lateinit var pruebastart:Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,8 +58,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         db = dbCaidasHelper(this)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        botonPopup = findViewById(R.id.warning)
-        botonPopup.visibility = View.GONE
         square = findViewById(R.id.tv_square)
         valores = Valores()
 
@@ -142,6 +142,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         fun stopCountdown(){
             countDownTimer2.cancel()
         }
+        //////////////////////////////////////
+
+        //////////////////////////////////////
+
         ///MOSTRAR LAS CAÍDAS DEL USUARIO POR PANTALLA
         fun displaycaidas() {
             db = dbCaidasHelper(this) // Inicializa tu DBHelper con el contexto
@@ -161,16 +165,20 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             llamar()
             stopCountdown()
             limpiarVentanaTiempo()
+            sensorManager.unregisterListener(this)
+            super.onDestroy()
         }
+        val warning :ImageButton=findViewById(R.id.warning)
         //BOTÓN POPUP//
-        botonPopup.setOnClickListener {
-            botonPopup.visibility = View.GONE
+        warning.setOnClickListener {
+            warning.visibility = View.GONE
             stopCountdown()
+            sensorManager.unregisterListener(this)
+            super.onDestroy()
             limpiarVentanaTiempo()
             //no se registra caída ni se llama porque es para falsa alarma
         }
 
-        val warning :ImageButton=findViewById(R.id.warning)
         val andargif: GifImageView = findViewById(R.id.andargif)
 
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//

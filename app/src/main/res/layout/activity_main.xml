@@ -7,6 +7,23 @@
     android:background="#121313"
     tools:context="MainActivity">
 
+    <Button
+        android:id="@+id/pruebastart"
+        android:layout_width="160dp"
+        android:layout_height="137dp"
+        android:text="Star?"
+        />
+
+    <Button
+        android:id="@+id/pruebastop"
+        android:layout_width="160dp"
+        android:layout_height="137dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="-14dp"
+        android:text="Stop"
+
+        />
+
     <TextView
         android:id="@+id/tv_square"
         android:layout_width="200dp"
