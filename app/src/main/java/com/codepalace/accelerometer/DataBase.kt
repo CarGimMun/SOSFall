@@ -3,74 +3,151 @@ package com.codepalace.accelerometer
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
+import android.icu.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
+import kotlin.collections.ArrayList
 
 class DataBase(context: Context?, name: String?, factory: CursorFactory?, version: Int) :
     SQLiteOpenHelper(context, name, factory, version) {
-    private val  dbR: SQLiteDatabase = readableDatabase
-    private val  dbW: SQLiteDatabase = writableDatabase
+
+
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
-        val qr1 = "create table USERS(username,email,contact,password)"
+        val qr1 = "create table USERS(username,email,contact,password,PRIMARY KEY (username))"
         sqLiteDatabase.execSQL(qr1)
+        val qr2 = "create table FALLS(username,accX,accY,accZ,date,time, foreign key(username) references USERS(username))"
+        sqLiteDatabase.execSQL(qr2)
     }
 
-    override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {}
-    fun register(username: String?, email: String?,contact:String?, password: String?) {
+    override fun onUpgrade(sqLiteDat: SQLiteDatabase?,  oldVers: Int, newVer:Int) {
+        val UsersDrop="DROP TABLE IF EXISTS USERS"
+        sqLiteDat?.execSQL(UsersDrop)
+
+        val FallsDrop="DROP TABLE IF EXISTS FALLS"
+        sqLiteDat?.execSQL(FallsDrop)
+
+        if(sqLiteDat!=null) {
+        onCreate(sqLiteDat) }
+
+    }
+
+    fun register(username: String?, email: String?, contact: String?, password: String?) {
         val cv = ContentValues()
         cv.put("username", username)
         cv.put("email", email)
         cv.put("contact", contact)
         cv.put("password", password)
+
         dbW.insert("USERS", null, cv)
         dbW.close()
-    }
 
+    }
+    val dbR: SQLiteDatabase = readableDatabase
+    val dbW: SQLiteDatabase = writableDatabase
     fun login(username: String?, password: String?): Int {
         var result = 0
         val str = arrayOfNulls<String>(2)
         str[0] = username
         str[1] = password
+
+
         val c = dbR.rawQuery("select * from USERS where ?=username and ?=password", str)
         if (c.moveToFirst()) {
             result = 1
-            c.close()
         }
+
+        c.close()
         return result
     }
-    fun getContact(username: String?, password: String?): String{
-        var phone:String
+
+    fun getContact(username: String?, password: String?): String {
+        var phone: String
         val str = arrayOfNulls<String>(2)
         str[0] = username
         str[1] = password
-        val cursor: Cursor=dbR.rawQuery("select contact from USERS where  ?=username and  ?=password ",str)
+        val cursor: Cursor =
+            dbR.rawQuery("select contact from USERS where  ?=username and  ?=password ", str)
         cursor.moveToFirst()
-        phone=cursor.getString(cursor.getColumnIndex("contact"))
-        if( phone==""){
-                cursor.close()
-                phone="112"
+        phone = cursor.getString(cursor.getColumnIndex("contact"))
+        cursor.close()
+        if (phone == "") {
+            phone = "112"
         }
+
         return phone
     }
-    fun registraCaida(accX: Float?, accY: Float?, accZ:Float?,
-        hora: Int?, minuto: Int?, dia: Int?, mes: Int?, anio: Int?) {
+
+     fun registraCaida(
+        username: String?,
+        accX: Float?, accY: Float?, accZ: Float?){
         val cv = ContentValues()
-        cv.put("accX", accX)
-        cv.put("accY", accY)
-        cv.put("accZ", accZ)
-        cv.put("hora", hora)
-        cv.put("minuto",minuto)
-        cv.put("dia", dia)
-        cv.put("mes", mes)
-        cv.put("año", anio)
+        val spanish= Locale("es", "ES")
+        val dateFormatter = DateTimeFormatter.ofPattern("dd, MMM yyyy")
+        val timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss ",spanish)
+       // val standarDate = formatter.parse(LocalDate.now().format(formatter)) //de string a TemporalAcessor
+        val date=LocalDate.now().format(dateFormatter)
+        val time = LocalTime.now().format(timeFormatter)
+
+        cv.put("username", username)
+        cv.put("accX", accX.toString())
+        cv.put("accY", accY.toString())
+        cv.put("accZ", accZ.toString())
+        cv.put("date", date)
+        cv.put("time", time.toString())
+
+
         dbW.insert("FALLS", null, cv)
-        dbW.close()
+
+
     }
 
-    fun obtenerRegistros(){
-        val registros = mutableListOf<String>()
-        val db = this.dbR
+
+    fun getFalls( atr:String, username: String): ArrayList<String> {
+        val listaData = ArrayList<String>()
+
+        val query: String
+
+        val cursor: Cursor
+
+        val col:ArrayList<String>
+        col= arrayListOf("username","accX","accY","accZ","date","time")
+
+        val str = arrayOfNulls<String>(1)
+        str[0] = username
+
+        query = "select $atr from FALLS where ?=username ORDER BY date DESC, time DESC LIMIT 25"
+        cursor = dbR.rawQuery(query,str)
+
+
+
+        if (cursor.count>0){
+            if(cursor.moveToFirst()) {
+                var iFilas:Int=0
+                do{
+                    var iCol:Int=0
+                    do {
+                        val z=col[iCol]
+                        val x=cursor.getColumnIndex(z)
+                        // Obtener los datos de cada columna (cambia los índices por los nombres de columnas reales)
+                        val data = cursor.getString(x)
+                        listaData.add(data)
+                        iCol++
+                    } while (iCol in 0..5)
+                    iFilas++
+                }while (cursor.moveToNext())
+
+        } }
+        cursor.close()
+        return listaData
     }
+
 
 }
+

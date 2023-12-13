@@ -13,19 +13,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
-import java.util.*
 import android.view.WindowManager
 import android.os.CountDownTimer
 import android.os.Looper
-import java.util.Calendar
-
+import android.widget.ListView
+import android.widget.SimpleAdapter
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
 
@@ -33,8 +31,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var square: TextView
     private lateinit var warning: ImageButton
     private lateinit var valores: Valores
-    private val ventanaTiempo = 30000L  // 30 segundos en milisegundos
-    private val handler = Handler(Looper.getMainLooper())
+    private val ventanaTiempo = 300000000L  // 30 segundos en milisegundos
+    private val handler =Handler(Looper.getMainLooper())
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
 
@@ -55,6 +53,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             // Programar la tarea para limpiar la ventana
             limpiarVentanaTiempo()
         }
+        valores=Valores()
         setUpSensorStuff()
 
     }
@@ -71,7 +70,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 SensorManager.SENSOR_DELAY_FASTEST
             ) } }
 
+
+
     override fun onSensorChanged(event: SensorEvent?) {
+
+        val it=intent
+        val username=it.getStringExtra("username")
+        val password=it.getStringExtra("password")
+        val db = DataBase(applicationContext,"SOSFall",null,1)
+
         fun suenaAlarma(){
             val resourceId = R.raw.alarma
             mediaPlayer = MediaPlayer.create(this, resourceId)
@@ -80,12 +87,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         fun llamar(){
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                val it=intent
-                val username=it.getStringExtra("username")
-                val password=it.getStringExtra("password")
+
                 val db = DataBase(applicationContext,"SOSFall",null,1)
-                val telf = db.getContact(username = username, password = password) // Tu número de teléfono
-                val intent = Intent(Intent.ACTION_CALL)
+                val telf = db.getContact(username = username, password = password)
+
+                // PARA NÚMERO DE EMERGENCY, LA DOCUMENTACIÓN INDICA QUE NO SE DEBE USAR ACTION_CALL
+                // SINO QUE HAY QUE EMPLEAR ACTION_DIAL
+                if(telf=="112"){
+                    intent = Intent(Intent.ACTION_DIAL)
+                }else {
+                    intent = Intent(Intent.ACTION_CALL)
+                }
                 intent.data = Uri.parse("tel:$telf")
                 startActivity(intent)
             } else {
@@ -93,91 +105,149 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
             }
         }
-        fun startCountdown(){
-            // Creamos objeto de la cuenta atrás de 30 segundos (30000 milisegundos)
-            val countDownTimer= object :
-                CountDownTimer (10000,1000){
-                override fun onTick(millisUntilFinished: Long) {
-                    // Se ejecuta cada segundo mientras la cuenta atrás está en progreso
-                }
-                override fun onFinish() {
-                    // La cuenta atrás ha finalizado
-                    llamar()
-                }
+
+
+        var countDownTimer= object: CountDownTimer(1000,100){
+            val contador: TextView= findViewById(R.id.contador)
+
+            override fun onTick(millisUntilFinished: Long) {
+                // Se ejecuta cada segundo mientras la cuenta atrás está en progreso
+                contador.text=millisUntilFinished.toString()
             }
-            // Iniciar la cuenta atrás
-            countDownTimer.start()
-        }
-        fun obtenerCalendario(): List<Int>{
-            val calendario= Calendar.getInstance()
-            // Obtener la hora en formato de 24 horas
-            val hora = calendario.get(Calendar.HOUR_OF_DAY)
-            // Obtener los minutos
-            val minutos=calendario.get(Calendar.MINUTE)
-            // Obtener el día
-            val dia=calendario.get(Calendar.DAY_OF_MONTH)
-            // Obtener el mes de año pero los meses comienzan en 0 así que le sumamos 1
-            val mes=calendario.get(Calendar.MONTH)+1
-            // Obtener el año
-            val anio=calendario.get(Calendar.YEAR)
-            return listOf(minutos,hora,dia,mes,anio)
+            override fun onFinish() {
+                // La cuenta atrás ha finalizado
+                // llamar()
+                //suenaAlarma()
+
+            }
         }
 
-        //BOTÓN DE LLAMADA//
-        val callButton:Button = findViewById(R.id.callButton)
+        fun startCountdown(){
+            // Iniciar la cuenta atrás
+            countDownTimer.start()
+            }
+
+        fun stopCountdown() {
+            countDownTimer.cancel()
+        }
+
+        //BOTÓN DE LLAMADA//-------
+
+        // Creamos objeto de la cuenta atrás de 30 segundos (30000 milisegundos)
+
+        val callButton:ImageButton = findViewById(R.id.callButton) //XML
+        callButton.visibility=View.GONE
+
+
+
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
-            limpiarVentanaTiempo()
             llamar()
+            stopCountdown()
+            limpiarVentanaTiempo()
+        }
+        warning.setOnClickListener {
+            warning.visibility = View.GONE
         }
 
         //RECOGIDA VALORES SENSOR Y MUESTRA POR PANTALLA
 
-        if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
-            val x = event.values[0]
-            val y = event.values[1]
-            val z = event.values[2]
+        if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION){
+        val x = event.values[0]
+        val y = event.values[1]
+        val z = event.values[2]
 
+        //Muestra por pantalla
+        square.apply {
+            translationZ = z
+            translationX = x
+            translationY = y
+        }
+        square.text = getString(R.string.MaxText)
+
+        //LÓGICA DE CAÍDAS Y CAMBIO DE COLOR EN BASE AL OUTPUT SENSOR--------
+        var contador_estado: Int = 0
+        if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
+        //if (valores.getMaximoX().toFloat() == 0.toFloat()) {
+
+            db.registraCaida(username!!,valores.getMaximoX(), valores.getMaximoY(),valores.getMaximoZ())
+            warning.visibility = View.VISIBLE
+            callButton.visibility = View.VISIBLE
+            var color = Color.RED
+            square.setBackgroundColor(color)
+
+            if (contador_estado == 1) {
+                stopCountdown()
+            } else {
+                //displaycaidas()
+                startCountdown()///corregir lo de llamar aun cuando se pulse
+            }
+            contador_estado = 1
+        } else {
+            stopCountdown()
             // Agregar valores a la lista
             valores.agregarValores(x, y, z)
-
-            //Muestra por pantalla
-            square.apply {
-                translationZ = z
-                translationX = x
-                translationY = y
-            }
-
-            //CAMBIO DE COLOR EN BASE AL OUTPUT SENSOR
-
-            if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
-                // if (valores.getMaximoX().toFloat() == 0.toFloat()) {
-                warning.visibility = View.VISIBLE
-                callButton.visibility = View.VISIBLE
-                val color = Color.RED
-                square.setBackgroundColor(color)
-                startCountdown()
-                suenaAlarma()
-
-                //OBTENER EL MOMENTO DE LA CAÍDA Y GUARDARLO
-                val accX = valores.getMaximoX()
-                val accy = valores.getMaximoY()
-                val accz = valores.getMaximoZ()
-                val (minutos,horas,dia,mes,ano) = obtenerCalendario()
-                val db = DataBase(applicationContext,"SOSFall",null,1)
-                db.registraCaida(accX,accy,accz,minutos,horas,dia,mes,ano)
-
-            } else {
-                warning.visibility = View.GONE
-                //val color = Color.GREEN
-                //square.setBackgroundColor(color)
-                // Si la condición no se cumple, restablecer el tiempo de inicio de la condición
-                tiempoInicioCondicion = 0L
-            }
-
-            square.text = getString(R.string.MaxText)
+            warning.visibility = View.GONE
+            var color = Color.GREEN
+            square.setBackgroundColor(color)
+            tiempoInicioCondicion = 0L
+            contador_estado = 0
         }
+
+        }
+        val fall=db.getFalls("*",username!!)
+        val lst: ListView= findViewById(R.id.tablaMainCaidas)
+        val list = ArrayList<HashMap<String, String>>()
+        var item: HashMap<String, String>
+        val sa: SimpleAdapter
+        if(fall.size>=5) {
+            for (i in 0 until 5) {
+                item = HashMap<String, String>()
+                item["col1"] = fall!![1]
+                item["col2"] = fall!![2]
+                item["col3"] = fall!![3]
+                item["col4"] = fall!![5]
+                item["col5"] = fall!![4]
+                list.add(item)
+            }
+            sa= SimpleAdapter(
+                this,
+                list,R.layout.multi_line,
+                arrayOf("col1", "col2", "col3", "col4", "col5"),
+                intArrayOf(R.id.line_a, R.id.line_b, R.id.line_c, R.id.line_d, R.id.line_e)
+            )
+        }else{
+            item = HashMap<String, String>()
+            item["col1"] = fall!![0]
+            list.add(item)
+            sa = SimpleAdapter(
+                this,
+                list,R.layout.single_line,
+                arrayOf("col1"),
+                intArrayOf(R.id.line_a)
+            )
+        }
+        lst.adapter= sa
+        val headLst: ListView= findViewById(R.id.titleCaidas)
+        val headList = ArrayList<HashMap<String, String>>()
+
+        var header: HashMap<String, String> = HashMap<String, String>()
+        header["col1"] = "AccX"
+        header["col2"] = "AccY"
+        header["col3"] = "AccZ"
+        header["col4"] = "Fecha"
+        header["col5"] = "Hora"
+        headList.add(header)
+
+        val Hsa: SimpleAdapter = SimpleAdapter(
+            this,
+            headList,R.layout.title_line,
+            arrayOf("col1", "col2", "col3", "col4", "col5"),
+            intArrayOf(R.id.line_a, R.id.line_b, R.id.line_c, R.id.line_d, R.id.line_e)
+        )
+        headLst.adapter=Hsa
     }
+
 
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
         // Do something here if sensor accuracy changes.
@@ -195,64 +265,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // Limpiar valores fuera de la ventana de tiempo
         valores.limpiarVentanaTiempo(System.currentTimeMillis() - ventanaTiempo)
         // Programar la próxima limpieza después de un segundo
-        handler.postDelayed({limpiarVentanaTiempo()} , ventanaTiempo)
+        val postDelayed = handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }
-    fun obtenerDatosTabla(): ArrayList<String> {
-        val listaDatos = ArrayList<String>() // Lista para almacenar los datos recuperados
-        val db = DataBase(applicationContext, "DataBase", null, 1)
-        // Consulta para obtener todos los datos de la tabla
-        val query = "SELECT * FROM FALLS" //
-        val cursor = db.readableDatabase.rawQuery(query, null)
-        // Iterar a través del cursor para obtener los datos
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                do {
-                    // Obtener los datos de cada columna (cambia los índices por los nombres de columnas reales)
-                    val accX = cursor.getFloat(cursor.getColumnIndex("accX"))
-                    val accY = cursor.getFloat(cursor.getColumnIndex("accY"))
-                    val accZ = cursor.getFloat(cursor.getColumnIndex("accZ"))
-                    val minuto = cursor.getInt(cursor.getColumnIndex("minuto"))
-                    val hora = cursor.getInt(cursor.getColumnIndex("hora"))
-                    val dia = cursor.getInt(cursor.getColumnIndex("dia"))
-                    val mes = cursor.getInt(cursor.getColumnIndex("mes"))
-                    val anio = cursor.getInt(cursor.getColumnIndex("año"))
-                } while (cursor.moveToNext())
-            }
-            cursor.close()
-        }
-        // Devolver la lista de datos recuperados
-        return listaDatos
-    }}
+
+
 
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)
 
 
-//CLASE  - DATOS DEL ACELERÓMETRO Y LIMPIEZA DE VENTANA
-data class Valores(
-    private val listaX: MutableList<Float> = mutableListOf(),
-    private val listaY: MutableList<Float> = mutableListOf(),
-    private val listaZ: MutableList<Float> = mutableListOf()
-) {
-    fun agregarValores(x: Float, y: Float, z: Float) {
-        listaX.add(x)
-        listaY.add(y)
-        listaZ.add(z)
-    }
-    //Elvis operator (?:)==> nullable reference but method/attribute supports only non-null.
-    // It returns the expression from the left and if it is null the one form the right.
-    fun getMaximoX(): Float = listaX.maxOrNull() ?: 0.0f
-    fun getMaximoY(): Float = listaY.maxOrNull() ?: 0.0f
-    fun getMaximoZ(): Float = listaZ.maxOrNull() ?: 0.0f
-
-    fun limpiarVentanaTiempo(tiempoLimite: Long) {
-        while (listaX.isNotEmpty() && (listaX.firstOrNull() ?: 0.0f) < tiempoLimite) {
-            listaX.removeAt(0)
-        }
-        while (listaY.isNotEmpty() && (listaY.firstOrNull() ?: 0.0f) < tiempoLimite) {
-            listaY.removeAt(0)
-        }
-        while (listaZ.isNotEmpty() && (listaZ.firstOrNull() ?: 0.0f) < tiempoLimite) {
-            listaZ.removeAt(0)
-        }
-    }
 }

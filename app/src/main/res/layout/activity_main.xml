@@ -7,55 +7,153 @@
     android:background="#131313"
     tools:context="MainActivity">
 
+
     <TextView
         android:id="@+id/tv_square"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="102dp"
-        android:layout_marginBottom="29dp"
-        android:background="#EF5350"
+        android:layout_marginEnd="98dp"
+        android:layout_marginBottom="476dp"
+        android:background="@drawable/shape_title"
         android:gravity="center"
         android:text="How are we doing today?"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/contador"
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:background="#EF5350"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Cuenta atrás"
+        android:textColor="#212121"
+        android:textSize="18sp" />
+
+    <ListView
+        android:id="@+id/titleCaidas"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="271dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:showDividers="beginning|middle|end"
+        android:textColor="@color/white" />
+
+    <ListView
+        android:id="@+id/tablaMainCaidas"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="12dp"
+        android:showDividers="beginning|middle|end"
+        android:textColor="@color/white" />
+
     <ImageButton
         android:id="@+id/warning"
-        android:layout_width="327dp"
-        android:layout_height="295dp"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="67dp"
-        android:layout_marginEnd="41dp"
-        android:layout_marginBottom="368dp"
-        android:background="@mipmap/caida2"
-        android:contentDescription="Warning icon"
-        app:srcCompat="@mipmap/caida2" />
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="234dp"
+        android:layout_marginEnd="191dp"
+        android:layout_marginBottom="398dp"
+        android:background="@drawable/estoy_bien"
+        android:contentDescription="@string/warningImage"
+        app:srcCompat="@drawable/estoy_bien" />
 
-    <Button
+    <ImageButton
         android:id="@+id/callButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="129dp"
+        android:layout_height="118dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="153dp"
-        android:layout_marginBottom="262dp"
-        android:text="Llamada"
-        android:textColor="@color/black" />
-</RelativeLayout>
-<!--
-    <TextView
-        android:id="@+id/registro_caidas"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="377dp"
+        android:background="@drawable/llamada"
+        android:contentDescription="@string/callButton" />
+
+    <!--<TableLayout
+        android:id="@+id/tablaCaidas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:padding="100dp"
-    android:textSize="16sp"
-    android:textColor="#000000"
-    android:background="#ffffff"
-    android:layout_marginTop="16dp" />-!>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-7dp"
+        android:layout_marginBottom="289dp"
+        android:divider="#FF0000"
+        android:dividerPadding="0dp"
+        android:padding="20dp"
+        android:showDividers="beginning|middle|end"
+        android:textColor="@color/white">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EF5350"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Registro últimas 5 caídas"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#E48482"
+            android:divider="#FF0000"
+            android:dividerPadding="0dp"
+            android:showDividers="beginning|middle|end">
+
+            <TextView
+                android:layout_weight="0.9"
+                android:padding="8dp"
+                android:text="Acc_x"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                />
+
+            <TextView
+                android:layout_weight="0.9"
+                android:padding="8dp"
+                android:text="Acc_y"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_weight="0.9"
+                android:padding="8dp"
+                android:text="Acc_z"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_weight="1.1"
+                android:padding="8dp"
+                android:text="Fecha"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_weight="1.1"
+                android:padding="8dp"
+                android:text="Hora"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+        </TableRow>
+    </TableLayout>-->
+
+</RelativeLayout>
