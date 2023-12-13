@@ -47,8 +47,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
     var contador_estado: Int =0
-    private lateinit var pruebastop:Button
-    private lateinit var pruebastart:Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +56,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         db = dbCaidasHelper(this)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
+        botonPopup = findViewById(R.id.warning)
+        botonPopup.visibility = View.GONE
         square = findViewById(R.id.tv_square)
         valores = Valores()
 
@@ -91,6 +91,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             mediaPlayer = MediaPlayer.create(this, resourceId)
             mediaPlayer?.start()
         }
+
+        //FUNCIÓN QUE LLAMA A TU CONTACTO
+        fun llamar() {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                val it=intent
+                val username=it.getStringExtra("username")
+                val password=it.getStringExtra("password")
+                val db = DataBase(applicationContext,"SOSFall",null,1)
+                val telf = db.getContact(username = username, password = password) // Tu número de teléfono
+                val intent = Intent(Intent.ACTION_CALL)
+                intent.data = Uri.parse("tel:$telf")
+                startActivity(intent)
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
+                Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
+            }}
         //REISTRAR CAÍDAS
         fun registrar_caida() {
             val calendario = Calendar.getInstance()
@@ -107,31 +123,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             db.registroCaidas(caida)
             Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
         }
-        //FUNCIÓN QUE LLAMA A TU CONTACTO
-        fun llamar() {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                val it=intent
-                val username=it.getStringExtra("username")
-                val password=it.getStringExtra("password")
-                val db = DataBase(applicationContext,"SOSFall",null,1)
-                val telf = db.getContact(username = username, password = password) // Tu número de teléfono
-                val intent = Intent(Intent.ACTION_CALL)
-                intent.data = Uri.parse("tel:$telf")
-                startActivity(intent)
-                //  registrar_caida()
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
-                Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
-            }}
-        val countDownTimer2 = object:
+        //DECLARACIÓN DEL CONTADOR
+        var countDownTimer2 = object:
             CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
-            val contador: TextView= findViewById(R.id.contador)
+           val contador: TextView= findViewById(R.id.contador)
             override fun onTick(millisUntilFinished: Long) {
                 contador.setText("seconds remaining: " + millisUntilFinished / 1000+ "Estado: "+ contador_estado)
             }
             override fun onFinish() {
-                registrar_caida()
                 llamar()
+                registrar_caida()
                 //playAlarmTask.execute()
             }
         }
@@ -142,10 +143,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         fun stopCountdown(){
             countDownTimer2.cancel()
         }
-        //////////////////////////////////////
-
-        //////////////////////////////////////
-
         ///MOSTRAR LAS CAÍDAS DEL USUARIO POR PANTALLA
         fun displaycaidas() {
             db = dbCaidasHelper(this) // Inicializa tu DBHelper con el contexto
@@ -165,20 +162,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             llamar()
             stopCountdown()
             limpiarVentanaTiempo()
-            sensorManager.unregisterListener(this)
-            super.onDestroy()
         }
-        val warning :ImageButton=findViewById(R.id.warning)
         //BOTÓN POPUP//
-        warning.setOnClickListener {
-            warning.visibility = View.GONE
+
+        botonPopup.setOnClickListener {
+            botonPopup.visibility = View.GONE
             stopCountdown()
-            sensorManager.unregisterListener(this)
-            super.onDestroy()
             limpiarVentanaTiempo()
             //no se registra caída ni se llama porque es para falsa alarma
         }
 
+        val warning :ImageButton=findViewById(R.id.warning)
         val andargif: GifImageView = findViewById(R.id.andargif)
 
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//
@@ -224,9 +218,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 andargif.visibility = View.VISIBLE
                 square.setBackgroundColor(color)
                 warning.visibility = View.INVISIBLE
-            }
-        if (contador_estado==0){stopCountdown()} //redundante pero lo dejo
-        }}
+            }}}
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
         // Implementar si la precisión del sensor cambia
     }
