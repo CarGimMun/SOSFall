@@ -91,7 +91,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             mediaPlayer = MediaPlayer.create(this, resourceId)
             mediaPlayer?.start()
         }
-
+        fun parar_alarma(){
+            mediaPlayer?.apply {
+                if (isPlaying) {  // Comprueba si el MediaPlayer está reproduciendo
+                    stop()  // Detiene la reproducción
+                }
+                release()  // Libera los recursos del MediaPlayer
+            }
+            mediaPlayer = null  // Establece el objeto MediaPlayer como nulo
+        }
         //FUNCIÓN QUE LLAMA A TU CONTACTO
         fun llamar() {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
@@ -159,20 +167,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
             registrar_caida()
+            parar_alarma()
             llamar()
             stopCountdown()
             limpiarVentanaTiempo()
         }
-        //BOTÓN POPUP//
 
+        //BOTÓN POPUP//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
             stopCountdown()
             limpiarVentanaTiempo()
+            parar_alarma()
             //no se registra caída ni se llama porque es para falsa alarma
         }
 
-        val warning :ImageButton=findViewById(R.id.warning)
+       // val warning :ImageButton=findViewById(R.id.warning)
         val andargif: GifImageView = findViewById(R.id.andargif)
 
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//
@@ -195,7 +205,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             //          if (valores.getMaximoX().toFloat() == 0.toFloat()) {
                 botonPopup.visibility = View.VISIBLE
                 andargif.visibility = View.INVISIBLE
-                warning.visibility = View.VISIBLE
+               // warning.visibility = View.VISIBLE
                 callButton.visibility = View.VISIBLE
                 var color = Color.RED
                 square.setBackgroundColor(color)
@@ -217,10 +227,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 var color = Color.GREEN
                 andargif.visibility = View.VISIBLE
                 square.setBackgroundColor(color)
-                warning.visibility = View.INVISIBLE
+                botonPopup.visibility = View.INVISIBLE
+                //warning.visibility = View.INVISIBLE
             }}}
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
-        // Implementar si la precisión del sensor cambia
+        // Implementar si la precisión del sensor cambia, en nuestro caso no lo hace
     }
     override fun onDestroy() {
         sensorManager.unregisterListener(this)
