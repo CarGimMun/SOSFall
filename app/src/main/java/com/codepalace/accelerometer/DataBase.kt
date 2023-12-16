@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
 import android.icu.text.SimpleDateFormat
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -80,9 +83,8 @@ fun register(username: String?, email: String?, contact: String?, password: Stri
         }
         return phone
     }
-fun registraCaida(
-    username: String?,
-    accX: Float?, accY: Float?, accZ: Float?){
+@RequiresApi(Build.VERSION_CODES.O)
+fun registraCaida(username: String?, accX: Float?, accY: Float?, accZ: Float?){
     val cv = ContentValues()
 
     val spanish= Locale("es", "ES")
@@ -100,8 +102,9 @@ fun registraCaida(
     cv.put("time", time.toString())
 
     dbW.insert("FALLS", null, cv)
+
 }
-fun getFalls( atr:String, username: String): ArrayList<String> {
+fun getFalls(atr:String, username: String): ArrayList<String> {
     val listaData = ArrayList<String>()
     val query: String
     val cursor: Cursor

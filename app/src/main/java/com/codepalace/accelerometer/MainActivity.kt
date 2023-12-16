@@ -28,20 +28,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import java.util.*
-import com.codepalace.accelerometer.databinding.ActivityLoginBinding
 import java.util.Calendar
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Looper
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import pl.droidsonroids.gif.GifImageView
 import android.widget.SimpleAdapter
+import androidx.annotation.RequiresApi
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
     //private lateinit var db: dbCaidasHelper
     private lateinit var sensorManager: SensorManager
-    private lateinit var square: TextView
     private lateinit var botonPopup: ImageButton
     private lateinit var valores: Valores
     private val ventanaTiempo = 300000000L  // 30 segundos en milisegundos
@@ -58,21 +58,24 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
+        val it=intent
+        val username=it.getStringExtra("username")
+        val password=it.getStringExtra("password")
+        val db = DataBase(applicationContext,"SOSFall",null,5)
+
         botonPopup = findViewById(R.id.warning)
         botonPopup.visibility = View.GONE
-        square = findViewById(R.id.tv_square)
         valores = Valores()
 
         setUpSensorStuff()
         countDownTimer2 = object:
             CountDownTimer(5000, 1000) { // Cuenta atrás de 10 segundos
-            val contador: TextView= findViewById(R.id.contador)
             override fun onTick(millisUntilFinished: Long) {
-                contador.setText("seconds remaining: " + millisUntilFinished / 1000+ "Estado: "+ contador_estado)
             }
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onFinish() {
                 llamar()
-                //registrar_caidas()
+                registro_caida()
             }}
     }
 
@@ -86,12 +89,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 SensorManager.SENSOR_DELAY_FASTEST
             )}}
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
-        val it=intent
-        val username=it.getStringExtra("username")
-        val password=it.getStringExtra("password")
-        val db = DataBase(applicationContext,"SOSFall",null,5)
+         //display_caidas()
+        val andargif: GifImageView = findViewById(R.id.andargif)
 
         //BOTÓN DE LLAMADA//
         val callButton:ImageButton = findViewById(R.id.callButton)
@@ -99,7 +101,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
             parar_alarma()
-            //registrar_caidas()
+            registro_caida()
             llamar()
             stopCountdown()
             limpiarVentanaTiempo()
@@ -111,22 +113,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             limpiarVentanaTiempo()
             parar_alarma()
         }
-        val andargif: GifImageView = findViewById(R.id.andargif)
 
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//
         if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             val X = event.values[0]
             val Y = event.values[1]
             val Z = event.values[2]
-            square.apply {
-                translationZ = Z
-                translationX = X
-                translationY = Y
-            }
-            square.text =
-                "Máximo X: ${valores.getMaximoX().format(2)}\n" +
-                "Máximo Y: ${valores.getMaximoY().format(2)}\n" +
-                "Máximo Z: ${valores.getMaximoZ().format(2)}"
 
 
             //MODIFICACIÓN DE UMBRAL Y LÓGICA DE CAÍDAS//
@@ -134,22 +126,20 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                  botonPopup.visibility = View.VISIBLE
                 andargif.visibility = View.INVISIBLE
                 callButton.visibility = View.VISIBLE
-                var color = Color.RED
-                square.setBackgroundColor(color)
+
                 if  (contador_estado==1){
                     stopCountdown() //ya te has caído, sigues en estado rojo
                 }else{
                     suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
-                 //   registrar_caidas() //renueva los datos de la caída
+                    registro_caida()
+                  //  display_caidas()
                     startCountdown() //se ha caído por primera vez, comienza el estdo caída
                 }
                 contador_estado=1
             } else { //no se ha caído
                 contador_estado= 0 //ESTADO NO CAÍDA
                 valores.agregarValores(X, Y, Z)
-                var color = Color.GREEN
                 andargif.visibility = View.VISIBLE
-                square.setBackgroundColor(color)
                 botonPopup.visibility= View.INVISIBLE
             }}}
 
@@ -165,12 +155,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private fun limpiarVentanaTiempo() {
         // Limpiar valores fuera de la ventana de tiempo
         valores.limpiarVentanaTiempo(System.currentTimeMillis() - ventanaTiempo)
-        // Programar la próxima limpieza después de horas
         val postDelayed = handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }
     fun suena_alarma(){
         val resourceId = R.raw.alarma
-        mediaPlayer = MediaPlayer.create(this, resourceId)
+        mediaPlayer = create(this, resourceId)
         mediaPlayer?.start()
     }
     fun parar_alarma(){
@@ -194,7 +183,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val username=it.getStringExtra("username")
         val password=it.getStringExtra("password")
         val db = DataBase(applicationContext,"SOSFall",null,5)
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             val password=it.getStringExtra("password")
            //val db = DataBase(applicationContext,"SOSFall",null,1)
@@ -210,10 +198,17 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
             Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
         }}
-        fun registrar_caidas() {
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun registro_caida(){
             val it=intent
             val username=it.getStringExtra("username")
-            val password=it.getStringExtra("password")
+            val db = DataBase(applicationContext,"SOSFall",null,5)
+            db.registraCaida(username,valores.getMaximoX(),valores.getMaximoY(),valores.getMaximoZ())
+        }
+        fun display_caidas() {
+            val it=intent
+            val username=it.getStringExtra("username")
             val db = DataBase(applicationContext,"SOSFall",null,5)
 
             val fall=db.getFalls("*",username!!)
