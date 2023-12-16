@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tablaData"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#131313"
+    android:orientation="horizontal"
+    tools:context="MainActivity"
+    android:weightSum="1"
+    android:paddingBottom="5dp"
+    android:paddingStart="5dp"
+    android:divider="@drawable/divider"
+    android:dividerHeight="1px"
+    tools:ignore="RtlSymmetry">
+
+    <TextView
+        android:id="@+id/line_a"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:background="@drawable/left_border_shape"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:divider="@drawable/divider"
+        android:dividerHeight="1px"
+
+        android:text="@string/acc_x"
+        android:textAlignment="center"
+        android:textColor="#212121"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/line_b"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:background="@drawable/shape_table"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+
+        android:text="@string/acc_y"
+        android:textAlignment="center"
+        android:textColor="#212121"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/line_c"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:background="@drawable/shape_table"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+
+        android:text="@string/acc_z"
+        android:textAlignment="center"
+        android:textColor="#212121"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/line_e"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:background="@drawable/shape_table"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+
+        android:text="@string/fecha"
+        android:textAlignment="center"
+        android:textColor="#212121"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/line_d"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:background="@drawable/right_border_shape"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+
+
+        android:text="@string/hora"
+        android:textAlignment="center"
+        android:textColor="#212121"
+        android:textSize="14sp" />
+
+</LinearLayout>

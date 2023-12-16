@@ -31,19 +31,21 @@ import java.util.*
 import com.codepalace.accelerometer.databinding.ActivityLoginBinding
 import java.util.Calendar
 import android.os.AsyncTask
+import android.os.Looper
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import pl.droidsonroids.gif.GifImageView
+import android.widget.SimpleAdapter
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
-    private lateinit var db: dbCaidasHelper
+    //private lateinit var db: dbCaidasHelper
     private lateinit var sensorManager: SensorManager
     private lateinit var square: TextView
     private lateinit var botonPopup: ImageButton
     private lateinit var valores: Valores
     private val ventanaTiempo = 300000000L  // 30 segundos en milisegundos
-    private val handler = Handler()
+    private val handler =Handler()
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var countDownTimer2: CountDownTimer //private solo de la clase de main activity
@@ -54,8 +56,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
-        db = dbCaidasHelper(this)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         botonPopup = findViewById(R.id.warning)
@@ -65,18 +65,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         setUpSensorStuff()
         countDownTimer2 = object:
-            CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
+            CountDownTimer(5000, 1000) { // Cuenta atrás de 10 segundos
             val contador: TextView= findViewById(R.id.contador)
             override fun onTick(millisUntilFinished: Long) {
                 contador.setText("seconds remaining: " + millisUntilFinished / 1000+ "Estado: "+ contador_estado)
             }
             override fun onFinish() {
                 llamar()
-                registrar_caida()
+                //registrar_caidas()
             }}
-        //Estaba pasando que no accedía bien al objeti contador porque existía dentro de la función, en on sensor change realemente se activa una vez
-        //conviene tener estas cosas en variable global,
-
     }
 
     private fun setUpSensorStuff() {
@@ -91,39 +88,29 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
-
-        ///MOSTRAR LAS CAÍDAS DEL USUARIO POR PANTALLA
-        fun displaycaidas() {
-            db = dbCaidasHelper(this) // Inicializa tu DBHelper con el contexto
-            val listView : ListView = findViewById(R.id.lista_registros)
-            var listaCaidas = db.get5registros()
-
-            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaCaidas)
-            listView.adapter = adapter
-        }
+        val it=intent
+        val username=it.getStringExtra("username")
+        val password=it.getStringExtra("password")
+        val db = DataBase(applicationContext,"SOSFall",null,5)
 
         //BOTÓN DE LLAMADA//
         val callButton:ImageButton = findViewById(R.id.callButton)
         callButton.visibility=View.GONE
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
-            registrar_caida()
             parar_alarma()
+            //registrar_caidas()
             llamar()
             stopCountdown()
             limpiarVentanaTiempo()
         }
-
         //BOTÓN POPUP//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
             stopCountdown()
             limpiarVentanaTiempo()
             parar_alarma()
-            //no se registra caída ni se llama porque es para falsa alarma
         }
-
-       // val warning :ImageButton=findViewById(R.id.warning)
         val andargif: GifImageView = findViewById(R.id.andargif)
 
         //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//
@@ -138,40 +125,36 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
             square.text =
                 "Máximo X: ${valores.getMaximoX().format(2)}\n" +
-                        "Máximo Y: ${valores.getMaximoY().format(2)}\n" +
-                        "Máximo Z: ${valores.getMaximoZ().format(2)}"
+                "Máximo Y: ${valores.getMaximoY().format(2)}\n" +
+                "Máximo Z: ${valores.getMaximoZ().format(2)}"
+
 
             //MODIFICACIÓN DE UMBRAL Y LÓGICA DE CAÍDAS//
             if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
-            //          if (valores.getMaximoX().toFloat() == 0.toFloat()) {
-                botonPopup.visibility = View.VISIBLE
+                 botonPopup.visibility = View.VISIBLE
                 andargif.visibility = View.INVISIBLE
                 callButton.visibility = View.VISIBLE
                 var color = Color.RED
                 square.setBackgroundColor(color)
-                //displaycaidas()
                 if  (contador_estado==1){
-                    //stopCountdown() //ya te has caído, sigues en estado rojo
-                    //intento de cancelar cada contador que venga detrás
+                    stopCountdown() //ya te has caído, sigues en estado rojo
                 }else{
                     suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
-                   // displaycaidas() //renueva los datos de la caída
+                 //   registrar_caidas() //renueva los datos de la caída
                     startCountdown() //se ha caído por primera vez, comienza el estdo caída
-
                 }
                 contador_estado=1
             } else { //no se ha caído
                 contador_estado= 0 //ESTADO NO CAÍDA
-              //  displaycaidas()
-                stopCountdown() //PROBAR A QUITAR
                 valores.agregarValores(X, Y, Z)
                 var color = Color.GREEN
                 andargif.visibility = View.VISIBLE
                 square.setBackgroundColor(color)
-                botonPopup.visibility = View.INVISIBLE
+                botonPopup.visibility= View.INVISIBLE
             }}}
+
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
-        // Implementar si la precisión del sensor cambia, en nuestro caso no lo hace
+        // Implementar si la precisión del sensor cambia
     }
     override fun onDestroy() {
         sensorManager.unregisterListener(this)
@@ -183,59 +166,111 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // Limpiar valores fuera de la ventana de tiempo
         valores.limpiarVentanaTiempo(System.currentTimeMillis() - ventanaTiempo)
         // Programar la próxima limpieza después de horas
-        handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
+        val postDelayed = handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }
-    fun llamar() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-            val it=intent
-            val username=it.getStringExtra("username")
-            val password=it.getStringExtra("password")
-            val db = DataBase(applicationContext,"SOSFall",null,1)
-            val telf = db.getContact(username = username, password = password) // Tu número de teléfono
-            val intent = Intent(Intent.ACTION_CALL)
-            intent.data = Uri.parse("tel:$telf")
-            startActivity(intent)
-        } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
-            Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
-        }}
-        fun suena_alarma(){
-            val resourceId = R.raw.alarma
-            mediaPlayer = MediaPlayer.create(this, resourceId)
-            mediaPlayer?.start()
-        }
-        fun parar_alarma(){
-            mediaPlayer?.apply {
-                if (isPlaying) {  // Comprueba si el MediaPlayer está reproduciendo
-                    stop()  // Detiene la reproducción
-                }
-                release()  // Libera los recursos del MediaPlayer
+    fun suena_alarma(){
+        val resourceId = R.raw.alarma
+        mediaPlayer = MediaPlayer.create(this, resourceId)
+        mediaPlayer?.start()
+    }
+    fun parar_alarma(){
+        mediaPlayer?.apply {
+            if (isPlaying) {  // Comprueba si el MediaPlayer está reproduciendo
+                stop()  // Detiene la reproducción
             }
-            mediaPlayer = null  // Establece el objeto MediaPlayer como nulo
+            release()  // Libera los recursos del MediaPlayer
         }
-    fun registrar_caida() {
-        val calendario = Calendar.getInstance()
-        val hora = calendario.get(Calendar.HOUR_OF_DAY) // Obtener la hora en formato de 24 horas
-        val minutos = calendario.get(Calendar.MINUTE)
-        val dia = calendario.get(Calendar.DAY_OF_MONTH)
-        val mes = calendario.get(Calendar.MONTH) + 1 // Los meses comienzan desde 0, por eso se suma 1
-        val anio = calendario.get(Calendar.YEAR)
-        ////////OBTENER EL MOMENTO DE LA CAÍDA Y GUARDARLO///////
-        val acc_x = valores.getMaximoX()
-        val acc_y = valores.getMaximoY()
-        val acc_z = valores.getMaximoZ()
-        val caida=Caidas(0,acc_x,acc_y,acc_z,minutos,hora,dia,mes,anio) ////VER SI SE PUEDE PONER ID CADA VEZ MÁS
-        db.registroCaidas(caida)
-        Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
+        mediaPlayer = null  // Establece el objeto MediaPlayer como nulo
     }
+    //DECLARACIÓN DEL CONTADOR
     fun startCountdown() {
         countDownTimer2.start()
     }
     fun stopCountdown(){
         countDownTimer2.cancel()
     }
+    fun llamar() {
+        val it=intent
+        val username=it.getStringExtra("username")
+        val password=it.getStringExtra("password")
+        val db = DataBase(applicationContext,"SOSFall",null,5)
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            val password=it.getStringExtra("password")
+           //val db = DataBase(applicationContext,"SOSFall",null,1)
+            val telf = db.getContact(username = username, password = password)
+            if(telf=="112"){
+                intent = Intent(Intent.ACTION_DIAL)
+            }else {
+                intent = Intent(Intent.ACTION_CALL)
+            }
+            intent.data = Uri.parse("tel:$telf")
+            startActivity(intent)
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
+            Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
+        }}
+        fun registrar_caidas() {
+            val it=intent
+            val username=it.getStringExtra("username")
+            val password=it.getStringExtra("password")
+            val db = DataBase(applicationContext,"SOSFall",null,5)
+
+            val fall=db.getFalls("*",username!!)
+            val lst: ListView= findViewById(R.id.tablaMainCaidas)
+            val list = ArrayList<HashMap<String, String>>()
+            var item: HashMap<String, String>
+            val sa: SimpleAdapter
+            if(fall.size>=5) {
+                for (i in 0 until 5) {
+                    item = HashMap<String, String>()
+                    item["col1"] = fall!![1]
+                    item["col2"] = fall!![2]
+                    item["col3"] = fall!![3]
+                    item["col4"] = fall!![5]
+                    item["col5"] = fall!![4]
+                    list.add(item)
+                }
+                sa= SimpleAdapter(
+                    this,
+                    list,R.layout.multi_line,
+                    arrayOf("col1", "col2", "col3", "col4", "col5"),
+                    intArrayOf(R.id.line_a, R.id.line_b, R.id.line_c, R.id.line_d, R.id.line_e)
+                )
+            }else{
+                item = HashMap<String, String>()
+                item["col1"] = fall!![0] ///
+                list.add(item)
+                sa = SimpleAdapter(
+                    this,
+                    list,R.layout.single_line,
+                    arrayOf("col1"),
+                    intArrayOf(R.id.line_a)
+                )}
+            lst.adapter= sa
+            val headLst: ListView= findViewById(R.id.titleCaidas)
+            val headList = ArrayList<HashMap<String, String>>()
+
+            var header: HashMap<String, String> = HashMap<String, String>()
+            header["col1"] = "AccX"
+            header["col2"] = "AccY"
+            header["col3"] = "AccZ"
+            header["col4"] = "Fecha"
+            header["col5"] = "Hora"
+            headList.add(header)
+
+            val Hsa: SimpleAdapter = SimpleAdapter(
+                this,
+                headList,R.layout.title_line,
+                arrayOf("col1", "col2", "col3", "col4", "col5"),
+                intArrayOf(R.id.line_a, R.id.line_b, R.id.line_c, R.id.line_d, R.id.line_e)
+            )
+            headLst.adapter=Hsa
+        }
 }
+
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)
+
 data class Valores(
     private val listaX: MutableList<Float> = mutableListOf(),
     private val listaY: MutableList<Float> = mutableListOf(),
@@ -259,4 +294,3 @@ data class Valores(
         while (listaZ.isNotEmpty() && listaZ.firstOrNull() ?: 0.0f < tiempoLimite) {
             listaZ.removeAt(0)
         }}}
-

@@ -6,23 +6,6 @@
     android:layout_height="match_parent"
     android:background="#121313"
     tools:context="MainActivity">
-<!--
-    <Button
-        android:id="@+id/pruebastart"
-        android:layout_width="160dp"
-        android:layout_height="137dp"
-        android:text="Star?"
-        />
-
-    <Button
-        android:id="@+id/pruebastop"
-        android:layout_width="160dp"
-        android:layout_height="137dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="-14dp"
-        android:text="Stop"
-
-        />-->
 
     <TextView
         android:id="@+id/tv_square"
@@ -95,14 +78,28 @@
         app:srcCompat="@mipmap/caida2" />
 
     <ListView
-        android:id="@+id/lista_registros"
-        android:layout_width="406dp"
-        android:layout_height="249dp"
-        android:layout_alignParentEnd="true"
+        android:id="@+id/titleCaidas"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="3dp"
-        android:background="#E48482"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="271dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:showDividers="beginning|middle|end"
+        android:textColor="@color/white" />
+
+    <ListView
+        android:id="@+id/tablaMainCaidas"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="12dp"
         android:showDividers="beginning|middle|end"
         android:textColor="@color/white" />
 </RelativeLayout>

@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
         btn?.setOnClickListener(View.OnClickListener {
             val username = edUsername?.text.toString().trim()
             val password = edPassword?.text.toString().trim()
-            val db = DataBase(applicationContext, "SOSFall", null, 1)
+            val db = DataBase(applicationContext, "SOSFall", null, 5)
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(
                     applicationContext,

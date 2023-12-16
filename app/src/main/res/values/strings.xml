@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">SOSFall</string>
+    <string name="regCaidas5">Registro últimas 5 caídas</string>
+    <string name="warningImage">Warning image</string>
+    <string name="callButton">Call Button</string>
+    <string name="fecha">Fecha</string>
+    <string name="hora">Hora</string>
+    <string name="acc_x">Acc_x</string>
+    <string name="acc_z">Acc_z</string>
+    <string name="acc_y">Acc_y</string>
+    <string name="registro_caidas">Registro caídas</string>
 </resources>

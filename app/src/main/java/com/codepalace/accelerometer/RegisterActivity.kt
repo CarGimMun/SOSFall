@@ -34,7 +34,7 @@ class RegisterActivity : AppCompatActivity() {
             val contact = edContact?.getText().toString().trim()
             val password = edPassword?.getText().toString().trim()
             val confirm = edConfirm?.getText().toString().trim()
-            val db = DataBase(applicationContext, "SOSFall", null, 1)
+            val db = DataBase(applicationContext, "SOSFall", null, 5)
             var emailPattern ="[a-zA-Z0-9._-]+@[a-z]+.+[a-z]+"
             if (username.isEmpty() || email.isEmpty() ||contact.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
                 if(email.matches(emailPattern.toRegex())){

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tablaData"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#131313"
+    android:orientation="horizontal"
+    tools:context="MainActivity"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/line_a"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.125"
+        android:background="@drawable/left_border_shape"
+        android:padding="8dp"
+        android:text="Acc_x"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/line_b"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.125"
+        android:padding="8dp"
+        android:text="Acc_y"
+        android:textSize="14sp"
+        android:background="@drawable/shape_table"
+        android:textColor="@color/white"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/line_c"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.125"
+        android:padding="8dp"
+        android:text="Acc_z"
+        android:textSize="14sp"
+        android:background="@drawable/right_border_shape"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:divider="#FF0000"
+        android:dividerPadding="0dp"/>
+
+    <TextView
+        android:id="@+id/line_e"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.320"
+        android:padding="8dp"
+        android:text="Fecha"
+        android:textSize="14sp"
+        android:background="@drawable/shape_single"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:divider="#FF0000"
+        android:dividerPadding="0dp"/>
+
+    <TextView
+        android:id="@+id/line_d"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.305"
+        android:background="@drawable/shape_single"
+        android:divider="#FF0000"
+        android:dividerPadding="0dp"
+        android:padding="8dp"
+        android:text="Hora"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="14sp"  />
+
+</LinearLayout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tablaData"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:textAlignment="center"
+    tools:context="MainActivity"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/line_a"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.125"
+        android:background="@drawable/h_left_border_shape"
+
+        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+
+        android:text="@string/acc_x"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/line_b"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.125"
+        android:background="@drawable/shape_title"
+
+        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+
+        android:text="@string/acc_y"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/line_c"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.125"
+        android:background="@drawable/h_right_border_shape"
+
+        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+
+        android:text="@string/acc_z"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/line_d"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.320"
+        android:background="@drawable/h_shape_single"
+
+        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+
+        android:text="@string/fecha"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@color/white"/>
+
+    <TextView
+        android:id="@+id/line_e"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.305"
+        android:background="@drawable/h_shape_single"
+
+        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+
+        android:text="@string/hora"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textAlignment="center"
+        android:textColor="@color/white"/>
+
+</LinearLayout>
