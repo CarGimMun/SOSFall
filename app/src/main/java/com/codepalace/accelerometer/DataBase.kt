@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DataBase(context: Context?, name: String?, factory: CursorFactory?, version: Int) :
     SQLiteOpenHelper(context, name, factory, version) {
-    val  db_r=readableDatabase
-    val db_w=writableDatabase
+   // val  db_r=readableDatabase
+    //val db_w=writableDatabase
     override fun onCreate(sqLiteDatabase: SQLiteDatabase) {
         val qr1 = "create table USERS(username,email,contact,password)"
         sqLiteDatabase.execSQL(qr1)
@@ -19,6 +19,7 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, i: Int, i1: Int) {}
     fun register(username: String?, email: String?,contact:String?, password: String?) {
+        val db_w = writableDatabase
         val cv = ContentValues()
         cv.put("username", username)
         cv.put("email", email)
@@ -29,6 +30,7 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
     }
 
     fun login(username: String?, password: String?): Int {
+        val db_r = readableDatabase
         var result = 0
         val str = arrayOfNulls<String>(2)
         str[0] = username
@@ -37,11 +39,13 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
         if (c.moveToFirst()) {
             result = 1
         }
+        c.close()
+        db_r.close()
         return result
     }
     @SuppressLint("Range")
     fun getContact(username: String?, password: String?): String{
-        val sqLiteDatabase: SQLiteDatabase
+        val db_r = readableDatabase
         var phone:String=""
         val str = arrayOfNulls<String>(2)
         str[0] = username
@@ -53,14 +57,12 @@ class DataBase(context: Context?, name: String?, factory: CursorFactory?, versio
             val rows:Int=cursor.count
             if(cursor.moveToFirst()){
                 phone=cursor.getString(cursor.getColumnIndex("contact"))
-            }else{
-                cursor.close()
-                phone="112"
             }
         } else{
             phone="112"
         }
+        cursor.close()
+        db_r.close()
         return phone
-    }
-     }
+    }}
 

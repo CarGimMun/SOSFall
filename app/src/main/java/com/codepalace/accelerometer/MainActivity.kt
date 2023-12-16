@@ -46,6 +46,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private val handler = Handler()
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
+    private lateinit var countDownTimer2: CountDownTimer //private solo de la clase de main activity
+
     var contador_estado: Int =0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,16 +64,19 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         valores = Valores()
 
         setUpSensorStuff()
+        countDownTimer2 = object:
+            CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
+            val contador: TextView= findViewById(R.id.contador)
+            override fun onTick(millisUntilFinished: Long) {
+                contador.setText("seconds remaining: " + millisUntilFinished / 1000+ "Estado: "+ contador_estado)
+            }
+            override fun onFinish() {
+                llamar()
+                registrar_caida()
+            }}
+        //Estaba pasando que no accedía bien al objeti contador porque existía dentro de la función, en on sensor change realemente se activa una vez
+        //conviene tener estas cosas en variable global,
 
-        fun displaycaidas() {
-            db = dbCaidasHelper(this) // Inicializa tu DBHelper con el contexto
-            val listView : ListView = findViewById(R.id.lista_registros)
-            var listaCaidas = db.get5registros()
-
-            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaCaidas)
-            listView.adapter = adapter
-        }
-        displaycaidas()
     }
 
     private fun setUpSensorStuff() {
@@ -86,71 +91,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
-        fun suena_alarma(){
-            val resourceId = R.raw.alarma
-            mediaPlayer = MediaPlayer.create(this, resourceId)
-            mediaPlayer?.start()
-        }
-        fun parar_alarma(){
-            mediaPlayer?.apply {
-                if (isPlaying) {  // Comprueba si el MediaPlayer está reproduciendo
-                    stop()  // Detiene la reproducción
-                }
-                release()  // Libera los recursos del MediaPlayer
-            }
-            mediaPlayer = null  // Establece el objeto MediaPlayer como nulo
-        }
-        //FUNCIÓN QUE LLAMA A TU CONTACTO
-        fun llamar() {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                val it=intent
-                val username=it.getStringExtra("username")
-                val password=it.getStringExtra("password")
-                val db = DataBase(applicationContext,"SOSFall",null,1)
-                val telf = db.getContact(username = username, password = password) // Tu número de teléfono
-                val intent = Intent(Intent.ACTION_CALL)
-                intent.data = Uri.parse("tel:$telf")
-                startActivity(intent)
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
-                Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
-            }}
-        //REISTRAR CAÍDAS
-        fun registrar_caida() {
-            val calendario = Calendar.getInstance()
-            val hora = calendario.get(Calendar.HOUR_OF_DAY) // Obtener la hora en formato de 24 horas
-            val minutos = calendario.get(Calendar.MINUTE)
-            val dia = calendario.get(Calendar.DAY_OF_MONTH)
-            val mes = calendario.get(Calendar.MONTH) + 1 // Los meses comienzan desde 0, por eso se suma 1
-            val anio = calendario.get(Calendar.YEAR)
-            ////////OBTENER EL MOMENTO DE LA CAÍDA Y GUARDARLO///////
-            val acc_x = valores.getMaximoX()
-            val acc_y = valores.getMaximoY()
-            val acc_z = valores.getMaximoZ()
-            val caida=Caidas(0,acc_x,acc_y,acc_z,minutos,hora,dia,mes,anio) ////VER SI SE PUEDE PONER ID CADA VEZ MÁS
-            db.registroCaidas(caida)
-            Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
-        }
-        //DECLARACIÓN DEL CONTADOR
-        var countDownTimer2 = object:
-            CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
-           val contador: TextView= findViewById(R.id.contador)
-            override fun onTick(millisUntilFinished: Long) {
-                contador.setText("seconds remaining: " + millisUntilFinished / 1000+ "Estado: "+ contador_estado)
-            }
-            override fun onFinish() {
-                llamar()
-                registrar_caida()
-                //playAlarmTask.execute()
-            }
-        }
-        //DECLARACIÓN DEL CONTADOR
-        fun startCountdown() {
-            countDownTimer2.start()
-        }
-        fun stopCountdown(){
-            countDownTimer2.cancel()
-        }
+
         ///MOSTRAR LAS CAÍDAS DEL USUARIO POR PANTALLA
         fun displaycaidas() {
             db = dbCaidasHelper(this) // Inicializa tu DBHelper con el contexto
@@ -205,30 +146,29 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             //          if (valores.getMaximoX().toFloat() == 0.toFloat()) {
                 botonPopup.visibility = View.VISIBLE
                 andargif.visibility = View.INVISIBLE
-               // warning.visibility = View.VISIBLE
                 callButton.visibility = View.VISIBLE
                 var color = Color.RED
                 square.setBackgroundColor(color)
-                displaycaidas()
+                //displaycaidas()
                 if  (contador_estado==1){
-                    stopCountdown() //ya te has caído, sigues en estado rojo
+                    //stopCountdown() //ya te has caído, sigues en estado rojo
                     //intento de cancelar cada contador que venga detrás
                 }else{
                     suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
-                    displaycaidas() //renueva los datos de la caída
+                   // displaycaidas() //renueva los datos de la caída
                     startCountdown() //se ha caído por primera vez, comienza el estdo caída
+
                 }
                 contador_estado=1
             } else { //no se ha caído
                 contador_estado= 0 //ESTADO NO CAÍDA
-                displaycaidas()
+              //  displaycaidas()
                 stopCountdown() //PROBAR A QUITAR
                 valores.agregarValores(X, Y, Z)
                 var color = Color.GREEN
                 andargif.visibility = View.VISIBLE
                 square.setBackgroundColor(color)
                 botonPopup.visibility = View.INVISIBLE
-                //warning.visibility = View.INVISIBLE
             }}}
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
         // Implementar si la precisión del sensor cambia, en nuestro caso no lo hace
@@ -244,7 +184,57 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         valores.limpiarVentanaTiempo(System.currentTimeMillis() - ventanaTiempo)
         // Programar la próxima limpieza después de horas
         handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
-    }}
+    }
+    fun llamar() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            val it=intent
+            val username=it.getStringExtra("username")
+            val password=it.getStringExtra("password")
+            val db = DataBase(applicationContext,"SOSFall",null,1)
+            val telf = db.getContact(username = username, password = password) // Tu número de teléfono
+            val intent = Intent(Intent.ACTION_CALL)
+            intent.data = Uri.parse("tel:$telf")
+            startActivity(intent)
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
+            Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
+        }}
+        fun suena_alarma(){
+            val resourceId = R.raw.alarma
+            mediaPlayer = MediaPlayer.create(this, resourceId)
+            mediaPlayer?.start()
+        }
+        fun parar_alarma(){
+            mediaPlayer?.apply {
+                if (isPlaying) {  // Comprueba si el MediaPlayer está reproduciendo
+                    stop()  // Detiene la reproducción
+                }
+                release()  // Libera los recursos del MediaPlayer
+            }
+            mediaPlayer = null  // Establece el objeto MediaPlayer como nulo
+        }
+    fun registrar_caida() {
+        val calendario = Calendar.getInstance()
+        val hora = calendario.get(Calendar.HOUR_OF_DAY) // Obtener la hora en formato de 24 horas
+        val minutos = calendario.get(Calendar.MINUTE)
+        val dia = calendario.get(Calendar.DAY_OF_MONTH)
+        val mes = calendario.get(Calendar.MONTH) + 1 // Los meses comienzan desde 0, por eso se suma 1
+        val anio = calendario.get(Calendar.YEAR)
+        ////////OBTENER EL MOMENTO DE LA CAÍDA Y GUARDARLO///////
+        val acc_x = valores.getMaximoX()
+        val acc_y = valores.getMaximoY()
+        val acc_z = valores.getMaximoZ()
+        val caida=Caidas(0,acc_x,acc_y,acc_z,minutos,hora,dia,mes,anio) ////VER SI SE PUEDE PONER ID CADA VEZ MÁS
+        db.registroCaidas(caida)
+        Toast.makeText(this,"Caida Registrada",Toast.LENGTH_SHORT).show()
+    }
+    fun startCountdown() {
+        countDownTimer2.start()
+    }
+    fun stopCountdown(){
+        countDownTimer2.cancel()
+    }
+}
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)
 data class Valores(
     private val listaX: MutableList<Float> = mutableListOf(),
@@ -269,3 +259,4 @@ data class Valores(
         while (listaZ.isNotEmpty() && listaZ.firstOrNull() ?: 0.0f < tiempoLimite) {
             listaZ.removeAt(0)
         }}}
+
