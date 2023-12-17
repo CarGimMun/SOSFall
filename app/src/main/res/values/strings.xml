@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">SOSFall</string>
-    <string name= "MaxText"> Máximo X: ${valores.getMaximoX().format(2)}\n
-        Máximo Y: ${valores.getMaximoY().format(2)}\n
-        Máximo Z: ${valores.getMaximoZ().format(2)}</string>
     <string name="regCaidas5">Registro últimas 5 caídas</string>
     <string name="warningImage">Warning image</string>
     <string name="callButton">Call Button</string>
@@ -12,4 +9,6 @@
     <string name="acc_z">Acc_z</string>
     <string name="acc_y">Acc_y</string>
     <string name="registro_caidas">Registro caídas</string>
+    <string name="EmergencyCall">Iniciando llamada de emergencia</string>
+    <string name="newUser"><u>Register for New User</u></string>
 </resources>

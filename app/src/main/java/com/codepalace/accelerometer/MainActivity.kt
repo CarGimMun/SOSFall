@@ -3,212 +3,207 @@ package com.codepalace.accelerometer
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.media.MediaPlayer
+import android.media.MediaPlayer.create
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
-import android.view.WindowManager
-import android.os.CountDownTimer
+import java.util.*
+import android.os.Build
 import android.os.Looper
 import android.widget.ListView
+import pl.droidsonroids.gif.GifImageView
 import android.widget.SimpleAdapter
+import androidx.annotation.RequiresApi
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
-
     private lateinit var sensorManager: SensorManager
-    private lateinit var square: TextView
-    private lateinit var warning: ImageButton
+    private lateinit var botonPopup: ImageButton
     private lateinit var valores: Valores
     private val ventanaTiempo = 300000000L  // 30 segundos en milisegundos
     private val handler =Handler(Looper.getMainLooper())
-    private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
+    private lateinit var countDownTimer: CountDownTimer //private solo de la clase de main activity
+
+    var contador_estado: Int =0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
-
-        // Keeps phone in light mode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        square = findViewById(R.id.tv_square)
-        warning = findViewById(R.id.warning) // En lugar de val botonpopup: ImageButton = findViewById(R.id.warning)
-        warning.visibility = View.GONE
-        warning.setOnClickListener {
-            // Ocultar el botón pop-up al hacer clic
-            warning.visibility = View.GONE
-            // Programar la tarea para limpiar la ventana
-            limpiarVentanaTiempo()
-        }
-        valores=Valores()
+
+        botonPopup = findViewById(R.id.warning)
+        botonPopup.visibility = View.GONE
+        valores = Valores()
+
         setUpSensorStuff()
+        countDownTimer = object:
+            CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
+            override fun onTick(millisUntilFinished: Long) {
+            }
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onFinish() {
+                llamar()
+            }}
+
 
     }
-    private fun setUpSensorStuff() {
-        // Create the sensor manager
-        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
-        // Specify the sensor you want to listen to
+    private fun setUpSensorStuff() {
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)?.also { accelerometer ->
             sensorManager.registerListener(
                 this,
                 accelerometer,
                 SensorManager.SENSOR_DELAY_FASTEST,
                 SensorManager.SENSOR_DELAY_FASTEST
-            ) } }
+            )}}
 
-
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onSensorChanged(event: SensorEvent?) {
-
-        val it=intent
-        val username=it.getStringExtra("username")
-        val password=it.getStringExtra("password")
-        val db = DataBase(applicationContext,"SOSFall",null,1)
-
-        fun suenaAlarma(){
-            val resourceId = R.raw.alarma
-            mediaPlayer = MediaPlayer.create(this, resourceId)
-            mediaPlayer?.start()
-        }
-
-        fun llamar(){
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-
-                val db = DataBase(applicationContext,"SOSFall",null,1)
-                val telf = db.getContact(username = username, password = password)
-
-                // PARA NÚMERO DE EMERGENCY, LA DOCUMENTACIÓN INDICA QUE NO SE DEBE USAR ACTION_CALL
-                // SINO QUE HAY QUE EMPLEAR ACTION_DIAL
-                if(telf=="112"){
-                    intent = Intent(Intent.ACTION_DIAL)
-                }else {
-                    intent = Intent(Intent.ACTION_CALL)
-                }
-                intent.data = Uri.parse("tel:$telf")
-                startActivity(intent)
-            } else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
-                Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
-        var countDownTimer= object: CountDownTimer(1000,100){
-            val contador: TextView= findViewById(R.id.contador)
-
-            override fun onTick(millisUntilFinished: Long) {
-                // Se ejecuta cada segundo mientras la cuenta atrás está en progreso
-                contador.text=millisUntilFinished.toString()
-            }
-            override fun onFinish() {
-                // La cuenta atrás ha finalizado
-                // llamar()
-                //suenaAlarma()
-
-            }
-        }
-
-        fun startCountdown(){
-            // Iniciar la cuenta atrás
-            countDownTimer.start()
-            }
-
-        fun stopCountdown() {
-            countDownTimer.cancel()
-        }
-
-        //BOTÓN DE LLAMADA//-------
-
-        // Creamos objeto de la cuenta atrás de 30 segundos (30000 milisegundos)
-
-        val callButton:ImageButton = findViewById(R.id.callButton) //XML
+        val andargif: GifImageView = findViewById(R.id.andargif)
+        display_caidas()
+        //BOTÓN DE LLAMADA//
+        val callButton:ImageButton = findViewById(R.id.callButton)
         callButton.visibility=View.GONE
-
-
-
         callButton.setOnClickListener {
             callButton.visibility = View.GONE
+            parar_alarma()
             llamar()
             stopCountdown()
             limpiarVentanaTiempo()
         }
-        warning.setOnClickListener {
-            warning.visibility = View.GONE
-        }
-
-        //RECOGIDA VALORES SENSOR Y MUESTRA POR PANTALLA
-
-        if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION){
-        val x = event.values[0]
-        val y = event.values[1]
-        val z = event.values[2]
-
-        //Muestra por pantalla
-        square.apply {
-            translationZ = z
-            translationX = x
-            translationY = y
-        }
-        square.text = getString(R.string.MaxText)
-
-        //LÓGICA DE CAÍDAS Y CAMBIO DE COLOR EN BASE AL OUTPUT SENSOR--------
-        var contador_estado: Int = 0
-        if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
-        //if (valores.getMaximoX().toFloat() == 0.toFloat()) {
-
-            db.registraCaida(username!!,valores.getMaximoX(), valores.getMaximoY(),valores.getMaximoZ())
-            warning.visibility = View.VISIBLE
-            callButton.visibility = View.VISIBLE
-            var color = Color.RED
-            square.setBackgroundColor(color)
-
-            if (contador_estado == 1) {
-                stopCountdown()
-            } else {
-                //displaycaidas()
-                startCountdown()///corregir lo de llamar aun cuando se pulse
-            }
-            contador_estado = 1
-        } else {
+        //BOTÓN POPUP//
+        botonPopup.setOnClickListener {
+            botonPopup.visibility = View.GONE
             stopCountdown()
-            // Agregar valores a la lista
-            valores.agregarValores(x, y, z)
-            warning.visibility = View.GONE
-            var color = Color.GREEN
-            square.setBackgroundColor(color)
-            tiempoInicioCondicion = 0L
-            contador_estado = 0
+            limpiarVentanaTiempo()
+            parar_alarma()
         }
 
+        //CAMBIO DE EVENTOS//
+        if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
+            val X = event.values[0]
+            val Y = event.values[1]
+            val Z = event.values[2]
+
+
+            //MODIFICACIÓN DE UMBRAL Y LÓGICA DE CAÍDAS//
+            if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25){
+            //if (valores.getMaximoX().toFloat() == 0.toFloat()){
+                botonPopup.visibility = View.VISIBLE
+                andargif.visibility = View.INVISIBLE
+                callButton.visibility = View.VISIBLE
+
+                if  (contador_estado==1){
+                    //stopCountdown() //PROBAR A QUITARLO
+                }else{
+                    suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
+                    startCountdown() //se ha caído por primera vez, comienza el estdo caída
+                }
+                contador_estado=1
+
+            } else { //no se ha caído
+                contador_estado= 0 //ESTADO NO CAÍDA
+                valores.agregarValores(X, Y, Z)
+                andargif.visibility = View.VISIBLE
+                botonPopup.visibility= View.INVISIBLE
+            }}}
+
+    override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
+        // Implementar si la precisión del sensor cambia
+    }
+    override fun onDestroy() {
+        sensorManager.unregisterListener(this)
+        super.onDestroy()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+    private fun limpiarVentanaTiempo() {
+        // Limpiar valores fuera de la ventana de tiempo
+        valores.limpiarVentanaTiempo(System.currentTimeMillis() - ventanaTiempo)
+        val postDelayed = handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
+    }
+
+    fun suena_alarma(){
+        val resourceId = R.raw.alarma
+        mediaPlayer = create(this, resourceId)
+        mediaPlayer?.start()
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun parar_alarma(){
+        mediaPlayer?.apply {
+            if (isPlaying) {  // Comprueba si el MediaPlayer está reproduciendo
+                stop()  // Detiene la reproducción
+            }
+            release()  // Libera los recursos del MediaPlayer
         }
+        mediaPlayer = null  // Establece el objeto MediaPlayer como nulo
+        registro_caida()
+    }
+    //DECLARACIÓN DEL CONTADOR
+    fun startCountdown() {
+        countDownTimer.start()
+    }
+    fun stopCountdown(){
+        countDownTimer.cancel()
+    }
+
+    fun llamar() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            val it=intent
+            val username=it.getStringExtra("username")
+            val password=it.getStringExtra("password")
+            val db = DataBase(applicationContext,"SOSFall",null,5)
+            val telf = db.getContact(username = username, password = password) // Tu número de teléfono
+            val intent = Intent(Intent.ACTION_CALL)
+            intent.data = Uri.parse("tel:$telf")
+            startActivity(intent)
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
+            Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
+        } }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun registro_caida(){
+        val it=intent
+        val username=it.getStringExtra("username")
+        val db = DataBase(applicationContext,"SOSFall",null,5)
+        db.registraCaida(username,valores.getMaximoX(),valores.getMaximoY(),valores.getMaximoZ())
+    }
+    fun display_caidas() {
+        val it=intent
+        val username=it.getStringExtra("username")
+        val db = DataBase(applicationContext,"SOSFall",null,5)
+
         val fall=db.getFalls("*",username!!)
         val lst: ListView= findViewById(R.id.tablaMainCaidas)
         val list = ArrayList<HashMap<String, String>>()
         var item: HashMap<String, String>
         val sa: SimpleAdapter
         if(fall.size>=5) {
-            for (i in 0 until 5) {
+            for (i in 0 until fall.size-1 step 6) {
                 item = HashMap<String, String>()
-                item["col1"] = fall!![1]
-                item["col2"] = fall!![2]
-                item["col3"] = fall!![3]
-                item["col4"] = fall!![5]
-                item["col5"] = fall!![4]
+                item["col1"] = fall!![i+1]
+                item["col2"] = fall!![i+2]
+                item["col3"] = fall!![i+3]
+                item["col4"] = fall!![i+4]
+                item["col5"] = fall!![i+5]
                 list.add(item)
+
             }
             sa= SimpleAdapter(
                 this,
@@ -218,15 +213,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             )
         }else{
             item = HashMap<String, String>()
-            item["col1"] = fall!![0]
+            item["col1"] = fall!![0] /////
             list.add(item)
             sa = SimpleAdapter(
                 this,
                 list,R.layout.single_line,
                 arrayOf("col1"),
                 intArrayOf(R.id.line_a)
-            )
-        }
+            )}
         lst.adapter= sa
         val headLst: ListView= findViewById(R.id.titleCaidas)
         val headList = ArrayList<HashMap<String, String>>()
@@ -247,30 +241,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         )
         headLst.adapter=Hsa
     }
-
-
-    override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
-        // Do something here if sensor accuracy changes.
-        // You must implement this callback in your code.
-        // Do not put T_ODO or it will throw a java exception
-
-    }
-    override fun onDestroy() {
-        sensorManager.unregisterListener(this)
-        super.onDestroy()
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
-    private fun limpiarVentanaTiempo() {
-        // Limpiar valores fuera de la ventana de tiempo
-        valores.limpiarVentanaTiempo(System.currentTimeMillis() - ventanaTiempo)
-        // Programar la próxima limpieza después de un segundo
-        val postDelayed = handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
-    }
-
-
+}
 
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)
-
-
-}
