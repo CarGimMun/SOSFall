@@ -117,13 +117,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
             //MODIFICACIÓN DE UMBRAL Y LÓGICA DE CAÍDAS//
             if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
-                 botonPopup.visibility = View.VISIBLE
+                botonPopup.visibility = View.VISIBLE
                 andargif.visibility = View.INVISIBLE
                 callButton.visibility = View.VISIBLE
 
                 if  (contador_estado==1){
                     //stopCountdown() //PROBAR A QUITARLO
                 }else{
+
                     suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
                     startCountdown() //se ha caído por primera vez, comienza el estdo caída
                 }
@@ -187,69 +188,69 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
         } }
 
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun registro_caida(){
-            val it=intent
-            val username=it.getStringExtra("username")
-            val db = DataBase(applicationContext,"SOSFall",null,5)
-            db.registraCaida(username,valores.getMaximoX(),valores.getMaximoY(),valores.getMaximoZ())
-        }
-        fun display_caidas() {
-            val it=intent
-            val username=it.getStringExtra("username")
-            val db = DataBase(applicationContext,"SOSFall",null,5)
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun registro_caida(){
+        val it=intent
+        val username=it.getStringExtra("username")
+        val db = DataBase(applicationContext,"SOSFall",null,5)
+        db.registraCaida(username,valores.getMaximoX(),valores.getMaximoY(),valores.getMaximoZ())
+    }
+    fun display_caidas() {
+        val it=intent
+        val username=it.getStringExtra("username")
+        val db = DataBase(applicationContext,"SOSFall",null,5)
 
-            val fall=db.getFalls("*",username!!)
-            val lst: ListView= findViewById(R.id.tablaMainCaidas)
-            val list = ArrayList<HashMap<String, String>>()
-            var item: HashMap<String, String>
-            val sa: SimpleAdapter
-            if(fall.size>=5) {
-                for (i in 0 until 5) {
-                    item = HashMap<String, String>()
-                    item["col1"] = fall!![1]
-                    item["col2"] = fall!![2]
-                    item["col3"] = fall!![3]
-                    item["col4"] = fall!![5]
-                    item["col5"] = fall!![4]
-                    list.add(item)
-                }
-                sa= SimpleAdapter(
-                    this,
-                    list,R.layout.multi_line,
-                    arrayOf("col1", "col2", "col3", "col4", "col5"),
-                    intArrayOf(R.id.line_a, R.id.line_b, R.id.line_c, R.id.line_d, R.id.line_e)
-                )
-            }else{
+        val fall=db.getFalls("*",username!!)
+        val lst: ListView= findViewById(R.id.tablaMainCaidas)
+        val list = ArrayList<HashMap<String, String>>()
+        var item: HashMap<String, String>
+        val sa: SimpleAdapter
+        if(fall.size>=5) {
+            for (i in 0 until 5) {
                 item = HashMap<String, String>()
-                item["col1"] = fall!![0] ///
+                item["col1"] = fall!![1]
+                item["col2"] = fall!![2]
+                item["col3"] = fall!![3]
+                item["col4"] = fall!![5]
+                item["col5"] = fall!![4]
                 list.add(item)
-                sa = SimpleAdapter(
-                    this,
-                    list,R.layout.single_line,
-                    arrayOf("col1"),
-                    intArrayOf(R.id.line_a)
-                )}
-            lst.adapter= sa
-            val headLst: ListView= findViewById(R.id.titleCaidas)
-            val headList = ArrayList<HashMap<String, String>>()
-
-            var header: HashMap<String, String> = HashMap<String, String>()
-            header["col1"] = "AccX"
-            header["col2"] = "AccY"
-            header["col3"] = "AccZ"
-            header["col4"] = "Fecha"
-            header["col5"] = "Hora"
-            headList.add(header)
-
-            val Hsa: SimpleAdapter = SimpleAdapter(
+            }
+            sa= SimpleAdapter(
                 this,
-                headList,R.layout.title_line,
+                list,R.layout.multi_line,
                 arrayOf("col1", "col2", "col3", "col4", "col5"),
                 intArrayOf(R.id.line_a, R.id.line_b, R.id.line_c, R.id.line_d, R.id.line_e)
             )
-            headLst.adapter=Hsa
-        }
+        }else{
+            item = HashMap<String, String>()
+            item["col1"] = fall!![0] /////
+            list.add(item)
+            sa = SimpleAdapter(
+                this,
+                list,R.layout.single_line,
+                arrayOf("col1"),
+                intArrayOf(R.id.line_a)
+            )}
+        lst.adapter= sa
+        val headLst: ListView= findViewById(R.id.titleCaidas)
+        val headList = ArrayList<HashMap<String, String>>()
+
+        var header: HashMap<String, String> = HashMap<String, String>()
+        header["col1"] = "AccX"
+        header["col2"] = "AccY"
+        header["col3"] = "AccZ"
+        header["col4"] = "Fecha"
+        header["col5"] = "Hora"
+        headList.add(header)
+
+        val Hsa: SimpleAdapter = SimpleAdapter(
+            this,
+            headList,R.layout.title_line,
+            arrayOf("col1", "col2", "col3", "col4", "col5"),
+            intArrayOf(R.id.line_a, R.id.line_b, R.id.line_c, R.id.line_d, R.id.line_e)
+        )
+        headLst.adapter=Hsa
+    }
 }
 
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)

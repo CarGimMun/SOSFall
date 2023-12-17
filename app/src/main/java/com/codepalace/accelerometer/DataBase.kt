@@ -104,7 +104,7 @@ fun registraCaida(username: String?, accX: Float?, accY: Float?, accZ: Float?){
     cv.put("time", time.toString())
 
     dbW.insert("FALLS", null, cv)
-
+    dbW.close()
 }
 fun getFalls(atr:String, username: String): ArrayList<String> {
     val listaData = ArrayList<String>()
@@ -138,9 +138,9 @@ fun getFalls(atr:String, username: String): ArrayList<String> {
             }while (cursor.moveToNext())
         } }
     cursor.close()
+    dbR.close()
     return listaData
-}
-    }
+}}
 
 
 
