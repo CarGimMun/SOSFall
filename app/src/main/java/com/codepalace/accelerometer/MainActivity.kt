@@ -40,7 +40,6 @@ import androidx.annotation.RequiresApi
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
-    //private lateinit var db: dbCaidasHelper
     private lateinit var sensorManager: SensorManager
     private lateinit var botonPopup: ImageButton
     private lateinit var valores: Valores
@@ -58,18 +57,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        val it=intent
-        val username=it.getStringExtra("username")
-        val password=it.getStringExtra("password")
-        val db = DataBase(applicationContext,"SOSFall",null,5)
-
         botonPopup = findViewById(R.id.warning)
         botonPopup.visibility = View.GONE
         valores = Valores()
 
         setUpSensorStuff()
         countDownTimer2 = object:
-            CountDownTimer(5000, 1000) { // Cuenta atrás de 10 segundos
+            CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
             override fun onTick(millisUntilFinished: Long) {
             }
             @RequiresApi(Build.VERSION_CODES.O)
@@ -92,7 +86,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
-         //display_caidas()
+        display_caidas()
         val andargif: GifImageView = findViewById(R.id.andargif)
 
         //BOTÓN DE LLAMADA//
@@ -114,7 +108,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             parar_alarma()
         }
 
-        //CAMBIO DE EVENTOS Y IMPRESIÓN DE MÁXIMOS//
+        //CAMBIO DE EVENTOS//
         if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             val X = event.values[0]
             val Y = event.values[1]
@@ -128,14 +122,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 callButton.visibility = View.VISIBLE
 
                 if  (contador_estado==1){
-                    stopCountdown() //ya te has caído, sigues en estado rojo
+                    //stopCountdown() //PROBAR A QUITARLO
                 }else{
                     suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
-                    registro_caida()
-                  //  display_caidas()
                     startCountdown() //se ha caído por primera vez, comienza el estdo caída
                 }
                 contador_estado=1
+
             } else { //no se ha caído
                 contador_estado= 0 //ESTADO NO CAÍDA
                 valores.agregarValores(X, Y, Z)
@@ -178,26 +171,21 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     fun stopCountdown(){
         countDownTimer2.cancel()
     }
+
     fun llamar() {
-        val it=intent
-        val username=it.getStringExtra("username")
-        val password=it.getStringExtra("password")
-        val db = DataBase(applicationContext,"SOSFall",null,5)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            val it=intent
+            val username=it.getStringExtra("username")
             val password=it.getStringExtra("password")
-           //val db = DataBase(applicationContext,"SOSFall",null,1)
-            val telf = db.getContact(username = username, password = password)
-            if(telf=="112"){
-                intent = Intent(Intent.ACTION_DIAL)
-            }else {
-                intent = Intent(Intent.ACTION_CALL)
-            }
+            val db = DataBase(applicationContext,"SOSFall",null,5)
+            val telf = db.getContact(username = username, password = password) // Tu número de teléfono
+            val intent = Intent(Intent.ACTION_CALL)
             intent.data = Uri.parse("tel:$telf")
             startActivity(intent)
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
             Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
-        }}
+        } }
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun registro_caida(){

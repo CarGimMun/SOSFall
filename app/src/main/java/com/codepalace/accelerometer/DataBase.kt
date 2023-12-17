@@ -57,6 +57,7 @@ fun register(username: String?, email: String?, contact: String?, password: Stri
         val str = arrayOfNulls<String>(2)
         str[0] = username
         str[1] = password
+
         val c = dbR.rawQuery("select * from USERS where ?=username and ?=password", str)
         if (c.moveToFirst()) {
             result = 1
@@ -65,15 +66,16 @@ fun register(username: String?, email: String?, contact: String?, password: Stri
         return result
     }
     @SuppressLint("Range")
-    fun getContact(username: String?, password: String?): String{
+    fun getContact(username: String?,password: String?): String{
         val sqLiteDatabase: SQLiteDatabase
         var phone:String=""
+
         val str = arrayOfNulls<String>(2)
         str[0] = username
         str[1] = password
 
         val cursor: Cursor =
-            dbR.rawQuery("select contact from USERS where ?=username and  ?=password ", str)
+            dbR.rawQuery("select contact from USERS where ?=username and ?=password", str)
         cursor.moveToFirst()
 
         phone = cursor.getString(cursor.getColumnIndex("contact"))
@@ -114,9 +116,11 @@ fun getFalls(atr:String, username: String): ArrayList<String> {
     val str = arrayOfNulls<String>(1)
     str[0] = username
 
-    query = "select $atr from FALLS where  username = ?  ORDER BY date DESC, time DESC LIMIT 25"
-    cursor = dbR.rawQuery(query,str)
-    
+    //query = "select $atr from FALLS where  username = ?  ORDER BY date DESC, time DESC LIMIT 25"
+   // cursor = dbR.rawQuery(query,str)
+
+    cursor=dbR.rawQuery("select $atr from FALLS where  username = ?  ORDER BY date DESC, time DESC LIMIT 25", str)
+
     if (cursor.count>0){
         if(cursor.moveToFirst()) {
             var iFilas:Int=0
@@ -135,7 +139,8 @@ fun getFalls(atr:String, username: String): ArrayList<String> {
         } }
     cursor.close()
     return listaData
-}}
+}
+    }
 
 
 
