@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
+import android.icu.text.DecimalFormat
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.widget.Toast
@@ -88,59 +89,61 @@ fun register(username: String?, email: String?, contact: String?, password: Stri
 @RequiresApi(Build.VERSION_CODES.O)
 fun registraCaida(username: String?, accX: Float?, accY: Float?, accZ: Float?){
     val cv = ContentValues()
-
+    val dbW = writableDatabase
     val spanish= Locale("es", "ES")
     val dateFormatter = DateTimeFormatter.ofPattern("dd, MMM yyyy")
     val timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss ",spanish)
-    // val standarDate = formatter.parse(LocalDate.now().format(formatter)) //de string a TemporalAcessor
+    //val standarDate = formatter.parse(LocalDate.now().format(formatter)) //de string a TemporalAcessor
     val date=LocalDate.now().format(dateFormatter)
     val time = LocalTime.now().format(timeFormatter)
 
-    cv.put("username", username)
-    cv.put("accX", accX.toString())
-    cv.put("accY", accY.toString())
-    cv.put("accZ", accZ.toString())
-    cv.put("date", date)
-    cv.put("time", time.toString())
+    val formato = DecimalFormat("##.##")
+    val accX = formato.format(accX)
+    val accY = formato.format(accY)
+    val accZ = formato.format(accZ)
 
+    cv.apply{
+       put("username", username)
+       put("accX", accX)
+       put("accY", accY)
+       put("accZ", accZ)
+       put("date", date)
+       put("time", time.toString())
+    }
     dbW.insert("FALLS", null, cv)
     dbW.close()
 }
-fun getFalls(atr:String, username: String): ArrayList<String> {
-    val listaData = ArrayList<String>()
-    val query: String
-    val cursor: Cursor
-    val col:ArrayList<String>
-    col= arrayListOf("username","accX","accY","accZ","date","time")
+    fun getFalls(atr:String, username: String): ArrayList<String> {
+        val listaData = ArrayList<String>()
+        val query: String
+        val cursor: Cursor
+        val col: ArrayList<String>
+        col = arrayListOf("username", "accX", "accY", "accZ", "date", "time")
 
-    val str = arrayOfNulls<String>(1)
-    str[0] = username
+        val str = arrayOfNulls<String>(1)
+        str[0] = username
 
-    //query = "select $atr from FALLS where  username = ?  ORDER BY date DESC, time DESC LIMIT 25"
-   // cursor = dbR.rawQuery(query,str)
-
-    cursor=dbR.rawQuery("select $atr from FALLS where  username = ?  ORDER BY date DESC, time DESC LIMIT 25", str)
-
-    if (cursor.count>0){
-        if(cursor.moveToFirst()) {
-            var iFilas:Int=0
-            do{
-                var iCol:Int=0
+        cursor = dbR.rawQuery(
+            "select $atr from FALLS where  username = ?  ORDER BY date DESC, time DESC LIMIT 25",
+            str
+        )
+        if (cursor.count > 0) {
+            if (cursor.moveToFirst()) {
+                var iFilas: Int = 0
                 do {
-                    val z=col[iCol]
-                    val x=cursor.getColumnIndex(z)
-                    // Obtener los datos de cada columna (cambia los índices por los nombres de columnas reales)
-                    val data = cursor.getString(x)
-                    listaData.add(data)
-                    iCol++
-                } while (iCol in 0..5)
-                iFilas++
-            }while (cursor.moveToNext())
-        } }
-    cursor.close()
-    dbR.close()
-    return listaData
-}}
-
-
-
+                    var iCol: Int = 0
+                    do {
+                        val z = col[iCol]
+                        val x = cursor.getColumnIndex(z)
+                        // Obtener los datos de cada columna (cambia los índices por los nombres de columnas reales)
+                        val data = cursor.getString(x)
+                        listaData.add(data)
+                        iCol++
+                    } while (iCol in 0..5)
+                    iFilas++
+                } while (cursor.moveToNext())
+            }}
+        cursor.close()
+        dbR.close()
+        return listaData
+    }}

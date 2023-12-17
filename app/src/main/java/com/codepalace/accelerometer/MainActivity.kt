@@ -37,6 +37,7 @@ import android.widget.ListView
 import pl.droidsonroids.gif.GifImageView
 import android.widget.SimpleAdapter
 import androidx.annotation.RequiresApi
+import java.text.DecimalFormat
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -71,6 +72,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 llamar()
                 registro_caida()
             }}
+
+
     }
 
     private fun setUpSensorStuff() {
@@ -84,11 +87,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             )}}
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
-        display_caidas()
         val andargif: GifImageView = findViewById(R.id.andargif)
-
+        display_caidas()
         //BOTÓN DE LLAMADA//
         val callButton:ImageButton = findViewById(R.id.callButton)
         callButton.visibility=View.GONE
@@ -124,7 +125,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 if  (contador_estado==1){
                     //stopCountdown() //PROBAR A QUITARLO
                 }else{
-
                     suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
                     startCountdown() //se ha caído por primera vez, comienza el estdo caída
                 }
