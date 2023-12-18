@@ -44,18 +44,18 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private lateinit var botonPopup: ImageButton
     private lateinit var valores: Valores
-    private val ventanaTiempo = 300000000L  // 30 segundos en milisegundos
+    private val ventanaTiempo = 300000000L
     private val handler =Handler()
     private var tiempoInicioCondicion: Long = 100
     private var mediaPlayer: MediaPlayer? = null
-    private lateinit var countDownTimer2: CountDownTimer //private solo de la clase de main activity
+    private lateinit var countDownTimer2: CountDownTimer
 
     var contador_estado: Int =0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) //DEJAR LA PANTALLA ENCENDIDA SIEMPRE QUE LA APLICACIÓN ESTÉ EN PRIMER PLANO
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         botonPopup = findViewById(R.id.warning)
@@ -63,8 +63,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         valores = Valores()
 
         setUpSensorStuff()
+        ///CREACIÓN DE CONTADOR///
         countDownTimer2 = object:
-            CountDownTimer(20000, 1000) {
+            CountDownTimer(10000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
             }
             @RequiresApi(Build.VERSION_CODES.O)
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 registro_caida()
             }}
     }
-
+    ///SET UP DEL SENSOR Y SUS CARACTERÍSTICAS
     private fun setUpSensorStuff() {
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)?.also { accelerometer ->
@@ -87,8 +88,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onSensorChanged(event: SensorEvent?) {
 
-        val andargif: GifImageView = findViewById(R.id.andargif)
-        display_caidas()
+        val andargif: GifImageView = findViewById(R.id.andargif) //GIF DE ANCIANA
+        display_caidas() //DISPLAY DE CAIDAS
 
         //BOTÓN DE LLAMADA//
         val callButton:ImageButton = findViewById(R.id.callButton)
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             limpiarVentanaTiempo()
         }
 
-        //BOTÓN POPUP//
+        //BOTÓN POPUP DE ESTOY BIEN//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
             stopCountdown()
@@ -110,12 +111,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             parar_alarma()
         }
 
-        //CAMBIO DE EVENTOS//
+        //REGISTRO DE ACELERACIONES//
         if (event?.sensor?.type == Sensor.TYPE_LINEAR_ACCELERATION) {
             val X = event.values[0]
             val Y = event.values[1]
             val Z = event.values[2]
-
 
             //MODIFICACIÓN DE UMBRAL Y LÓGICA DE CAÍDAS//
             if (valores.getMaximoX().toInt() > 30 || valores.getMaximoY().toInt() > 20 || valores.getMaximoZ().toInt() > 20) {
@@ -124,34 +124,36 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 callButton.visibility = View.VISIBLE
 
                 if  (contador_estado==1){
-                    ////
+                    ////No hace nada
                 }else{
-                    suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
+                    suena_alarma() //SUENA LA ALARMA SOLO SI TE HAS CAÍDO POR PRIMERA VEZ
                     startCountdown() //se ha caído por primera vez, comienza el estado caída
                 }
                 contador_estado=1
 
             } else { //no se ha caído
                 contador_estado= 0 //ESTADO NO CAÍDA
-                valores.agregarValores(X, Y, Z)
+                valores.agregarValores(X, Y, Z) //AÑADIR ACELERACIONES A LA LISTA
                 andargif.visibility = View.VISIBLE
                 botonPopup.visibility= View.INVISIBLE
             }}}
 
     override fun onAccuracyChanged(p0: Sensor?, accuracy: Int) {
-        // Implementar si la precisión del sensor cambia
+        // Implementar si la precisión del sensor cambia, no es el caso de nuestra aplicación
     }
     override fun onDestroy() {
+        //liberación de la memoria de alarma
         sensorManager.unregisterListener(this)
         super.onDestroy()
         mediaPlayer?.release()
         mediaPlayer = null
     }
     private fun limpiarVentanaTiempo() {
-        // Limpiar valores fuera de la ventana de tiempo
+        // Limpiar valores en la ventana de tiempo
         valores.limpiarVentanaTiempo(System.currentTimeMillis() - ventanaTiempo)
         val postDelayed = handler.postDelayed({ limpiarVentanaTiempo() }, ventanaTiempo)
     }
+    //FUNCIONES DE APLICACIÓN//
     fun suena_alarma(){
         val resourceId = R.raw.alarma
         mediaPlayer = create(this, resourceId)
@@ -166,7 +168,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
         mediaPlayer = null  // Establece el objeto MediaPlayer como nulo
     }
-    //DECLARACIÓN DEL CONTADOR
+    //FUNCIONAMIENTO CONTADOR
     fun startCountdown() {
         countDownTimer2.start()
     }
@@ -189,6 +191,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
         }}
 
+    //REGISTROS DE CAÍDA Y SU DISPLAY//
     @RequiresApi(Build.VERSION_CODES.O)
     fun registro_caida(){
         val it=intent

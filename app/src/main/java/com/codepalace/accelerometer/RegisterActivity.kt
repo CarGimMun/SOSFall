@@ -85,7 +85,7 @@ class RegisterActivity : AppCompatActivity() {
                 num /= 10
                 ++count
             }
-            if(count==9){
+            if(count==9){ //solo funciona si el contacto tiene 9 cifras
                 result=true
             }
             return result
