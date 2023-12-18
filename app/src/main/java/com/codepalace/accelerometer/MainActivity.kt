@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         setUpSensorStuff()
         countDownTimer2 = object:
-            CountDownTimer(20000, 1000) { // Cuenta atrás de 10 segundos
+            CountDownTimer(20000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
             }
             @RequiresApi(Build.VERSION_CODES.O)
@@ -72,8 +72,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 llamar()
                 registro_caida()
             }}
-
-
     }
 
     private fun setUpSensorStuff() {
@@ -88,8 +86,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onSensorChanged(event: SensorEvent?) {
+
         val andargif: GifImageView = findViewById(R.id.andargif)
         display_caidas()
+
         //BOTÓN DE LLAMADA//
         val callButton:ImageButton = findViewById(R.id.callButton)
         callButton.visibility=View.GONE
@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             stopCountdown()
             limpiarVentanaTiempo()
         }
+
         //BOTÓN POPUP//
         botonPopup.setOnClickListener {
             botonPopup.visibility = View.GONE
@@ -117,16 +118,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
 
             //MODIFICACIÓN DE UMBRAL Y LÓGICA DE CAÍDAS//
-            if (valores.getMaximoX().toInt() > 25 || valores.getMaximoY().toInt() > 25 || valores.getMaximoZ().toInt() > 25) {
+            if (valores.getMaximoX().toInt() > 30 || valores.getMaximoY().toInt() > 20 || valores.getMaximoZ().toInt() > 20) {
                 botonPopup.visibility = View.VISIBLE
                 andargif.visibility = View.INVISIBLE
                 callButton.visibility = View.VISIBLE
 
                 if  (contador_estado==1){
-                    //stopCountdown() //PROBAR A QUITARLO
+                    ////
                 }else{
                     suena_alarma() //SUENA LA ALARMA SI TE HAS CAÍDO POR PRIMERA VEZ
-                    startCountdown() //se ha caído por primera vez, comienza el estdo caída
+                    startCountdown() //se ha caído por primera vez, comienza el estado caída
                 }
                 contador_estado=1
 
@@ -186,7 +187,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE), 1)
             Toast.makeText(this, "No se encontró una aplicación para realizar la llamada", Toast.LENGTH_SHORT).show()
-        } }
+        }}
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun registro_caida(){
@@ -253,29 +254,4 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         headLst.adapter=Hsa
     }
 }
-
 private fun Float.format(digits: Int) = "%.${digits}f".format(this)
-
-data class Valores(
-    private val listaX: MutableList<Float> = mutableListOf(),
-    private val listaY: MutableList<Float> = mutableListOf(),
-    private val listaZ: MutableList<Float> = mutableListOf()
-) {
-    fun agregarValores(x: Float, y: Float, z: Float) {
-        listaX.add(x)
-        listaY.add(y)
-        listaZ.add(z)
-    }
-    fun getMaximoX(): Float = listaX.maxOrNull() ?: 0.0f
-    fun getMaximoY(): Float = listaY.maxOrNull() ?: 0.0f
-    fun getMaximoZ(): Float = listaZ.maxOrNull() ?: 0.0f
-    fun limpiarVentanaTiempo(tiempoLimite: Long) {
-        while (listaX.isNotEmpty() && listaX.firstOrNull() ?: 0.0f < tiempoLimite) {
-            listaX.removeAt(0)
-        }
-        while (listaY.isNotEmpty() && listaY.firstOrNull() ?: 0.0f < tiempoLimite) {
-            listaY.removeAt(0)
-        }
-        while (listaZ.isNotEmpty() && listaZ.firstOrNull() ?: 0.0f < tiempoLimite) {
-            listaZ.removeAt(0)
-        }}}
