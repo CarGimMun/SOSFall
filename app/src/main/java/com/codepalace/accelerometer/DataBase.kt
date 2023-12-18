@@ -97,7 +97,7 @@ fun registraCaida(username: String?, accX: Float?, accY: Float?, accZ: Float?){
     val date=LocalDate.now().format(dateFormatter)
     val time = LocalTime.now().format(timeFormatter)
 
-    val formato = DecimalFormat("##.##")
+    val formato = DecimalFormat("##")
     val accX = formato.format(accX)
     val accY = formato.format(accY)
     val accZ = formato.format(accZ)
@@ -115,7 +115,6 @@ fun registraCaida(username: String?, accX: Float?, accY: Float?, accZ: Float?){
 }
     fun getFalls(atr:String, username: String): ArrayList<String> {
         val listaData = ArrayList<String>()
-        val query: String
         val cursor: Cursor
         val col: ArrayList<String>
         col = arrayListOf("username", "accX", "accY", "accZ", "date", "time")
@@ -124,26 +123,40 @@ fun registraCaida(username: String?, accX: Float?, accY: Float?, accZ: Float?){
         str[0] = username
 
         cursor = dbR.rawQuery(
-            "select $atr from FALLS where  username = ?  ORDER BY date DESC, time DESC LIMIT 25",
-            str
-        )
-        if (cursor.count > 0) {
-            if (cursor.moveToFirst()) {
-                var iFilas: Int = 0
+            "select $atr from FALLS where  username = ?  ORDER BY date DESC, time DESC LIMIT 5",
+            str)
+        try {
+            if (cursor.count > 0 && cursor.moveToFirst()) {
                 do {
                     var iCol: Int = 0
-                    do {
-                        val z = col[iCol]
-                        val x = cursor.getColumnIndex(z)
+                    do{
                         // Obtener los datos de cada columna (cambia los índices por los nombres de columnas reales)
-                        val data = cursor.getString(x)
+                        val data = cursor.getString(iCol)
                         listaData.add(data)
                         iCol++
-                    } while (iCol in 0..5)
-                    iFilas++
-                } while (cursor.moveToNext())
-            }}
-        cursor.close()
-        dbR.close()
+                        var a=cursor.position
+                    }while (iCol < 6)
+                }while (cursor.moveToNext() && cursor.isAfterLast()==false)//cursor.isAfterLast()==false
+
+            } else {
+                listaData.add("No hay registros")
+            }
+        } finally {
+            cursor.close()
+            dbR.close()
+        }
         return listaData
-    }}
+    }
+    fun validUser(username: String?):Boolean{
+        var result:Boolean=true
+        val str = arrayOfNulls<String>(1)
+        str[0] = username
+
+        val c = dbR.rawQuery("select * from USERS where ?=username" ,str)
+        if (c.moveToFirst()) {
+            result = false
+        }
+        c.close()
+        return result
+    }
+}

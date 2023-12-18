@@ -22,16 +22,16 @@
 
     <ImageButton
         android:id="@+id/callButton"
-        android:layout_width="wrap_content"
-        android:layout_height="159dp"
+        android:layout_width="216dp"
+        android:layout_height="173dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="84dp"
-        android:layout_marginEnd="158dp"
-        android:layout_marginBottom="279dp"
+        android:layout_marginStart="87dp"
+        android:layout_marginEnd="155dp"
+        android:layout_marginBottom="298dp"
         android:background="@mipmap/llamada1"
-        android:contentDescription="Iniciando llamada de emergencia" />
+        android:contentDescription="@string/EmergencyCall" />
 
     <ImageButton
         android:id="@+id/warning"
@@ -46,18 +46,18 @@
         android:layout_marginEnd="52dp"
         android:layout_marginBottom="438dp"
         android:background="@mipmap/caida2"
-        android:contentDescription="Warning icon"
+        android:contentDescription="@string/warningImage"
         android:visibility="invisible"
         app:srcCompat="@mipmap/caida2" />
 
     <ListView
         android:id="@+id/titleCaidas"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="57dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="271dp"
+        android:layout_marginBottom="256dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:showDividers="beginning|middle|end"
@@ -69,10 +69,10 @@
         android:layout_height="256dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="12dp"
         android:showDividers="beginning|middle|end"
         android:textColor="@color/white" />
 </RelativeLayout>

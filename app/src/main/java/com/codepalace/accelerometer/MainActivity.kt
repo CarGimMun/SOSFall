@@ -206,13 +206,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         var item: HashMap<String, String>
         val sa: SimpleAdapter
         if(fall.size>=5) {
-            for (i in 0 until 5) {
+            for (i in 0 until fall.size-1 step 6) {
                 item = HashMap<String, String>()
-                item["col1"] = fall!![1]
-                item["col2"] = fall!![2]
-                item["col3"] = fall!![3]
-                item["col4"] = fall!![5]
-                item["col5"] = fall!![4]
+
+                item["col1"] = fall!![i+1]
+                item["col2"] = fall!![i+2]
+                item["col3"] = fall!![i+3]
+                item["col4"] = fall!![i+4]
+                item["col5"] = fall!![i+5]
                 list.add(item)
             }
             sa= SimpleAdapter(
@@ -223,7 +224,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             )
         }else{
             item = HashMap<String, String>()
-            item["col1"] = fall!![0] /////
+            item["col1"] = fall!![0]
             list.add(item)
             sa = SimpleAdapter(
                 this,
@@ -239,8 +240,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         header["col1"] = "AccX"
         header["col2"] = "AccY"
         header["col3"] = "AccZ"
-        header["col4"] = "Fecha"
-        header["col5"] = "Hora"
+        header["col4"] = "Hora"
+        header["col5"] = "Fecha"
         headList.add(header)
 
         val Hsa: SimpleAdapter = SimpleAdapter(

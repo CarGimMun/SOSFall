@@ -8,6 +8,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import android.text.TextUtils
+import android.util.Patterns
 
 class RegisterActivity : AppCompatActivity() {
     var edUsername: EditText? = null
@@ -35,32 +37,57 @@ class RegisterActivity : AppCompatActivity() {
             val password = edPassword?.getText().toString().trim()
             val confirm = edConfirm?.getText().toString().trim()
             val db = DataBase(applicationContext, "SOSFall", null, 5)
-            var emailPattern ="[a-zA-Z0-9._-]+@[a-z]+.+[a-z]+"
-            if (username.isEmpty() || email.isEmpty() ||contact.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-                if(email.matches(emailPattern.toRegex())){
-                    Toast.makeText(baseContext, "Please complete all the fields", Toast.LENGTH_SHORT).show()
-                }
+            if (username.isEmpty() || email.isEmpty() || contact.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
+                Toast.makeText(baseContext, "Please complete all the fields", Toast.LENGTH_SHORT)
+                    .show()
             } else {
-                if (password.compareTo(confirm) == 0) {
-                    if (db.login(username,password)==0){
-                        db.register(username, email,contact, password)
-                        Toast.makeText(baseContext, "Successful Registration", Toast.LENGTH_SHORT).show()
+                if(!db.validUser(username)){
+                    Toast.makeText(baseContext, "This username is taken", Toast.LENGTH_SHORT).show()
+                }else{
+                    if (!isValidEmail(email)) {
+                        Toast.makeText(baseContext, "Invalid email", Toast.LENGTH_SHORT).show()
+
                     }else{
-                        Toast.makeText(baseContext, "You have already an account", Toast.LENGTH_SHORT).show()
+                        if(!isValidContact(contact.toInt())){
+                            Toast.makeText(baseContext, "Invalid Phone Number", Toast.LENGTH_SHORT)
+                                .show()
+                        }else{
+                            if (password.compareTo(confirm) == 0) {
+                                if (db.login(username, password) == 0) {
+                                    db.register(username, email, contact, password)
+                                    Toast.makeText(baseContext, "Successful Registration", Toast.LENGTH_SHORT)
+                                        .show()
+                                } else {
+                                    Toast.makeText(
+                                        baseContext,
+                                        "You have already an account",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                                }
+                            } else {
+                                Toast.makeText(baseContext, "Password doesn't match", Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
-                    startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
-                } else {
-                    Toast.makeText(baseContext, "Password doesn't match", Toast.LENGTH_SHORT).show()
                 }
             }
-        })
-        tv?.setOnClickListener(View.OnClickListener {
-            startActivity(
-                Intent(
-                    this@RegisterActivity,
-                    LoginActivity::class.java
-                )
-            )
-        })
-    }
+        })}
+        private fun isValidEmail(target: CharSequence): Boolean {
+            return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+        }
+        fun isValidContact(contact:Int):Boolean {
+            var result:Boolean=false
+            var count = 0
+            var num = contact
+
+            while (num != 0) {
+                num /= 10
+                ++count
+            }
+            if(count==9){
+                result=true
+            }
+            return result
+        }
 }

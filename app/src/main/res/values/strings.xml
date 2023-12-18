@@ -9,4 +9,6 @@
     <string name="acc_z">Acc_z</string>
     <string name="acc_y">Acc_y</string>
     <string name="registro_caidas">Registro caídas</string>
+    <string name="EmergencyCall">Iniciando llamada de emergencia</string>
+    <string name="newUser"><u>Register for New User</u></string>
 </resources>
