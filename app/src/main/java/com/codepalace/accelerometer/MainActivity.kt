@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         setUpSensorStuff()
         countDownTimer2 = object:
-            CountDownTimer(10000, 1000) { // Cuenta atrás de 10 segundos
+            CountDownTimer(20000, 1000) { // Cuenta atrás de 10 segundos
             override fun onTick(millisUntilFinished: Long) {
             }
             @RequiresApi(Build.VERSION_CODES.O)
